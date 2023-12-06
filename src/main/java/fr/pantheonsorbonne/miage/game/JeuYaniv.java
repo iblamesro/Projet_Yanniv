@@ -42,7 +42,6 @@ public class JeuYaniv {
     }
 
     public void piocherCarteApresJeter() {
-        System.out.println("Joueurs piochent une carte après avoir jeté une carte :");
         for (Joueur joueur : joueurs) {
             System.out.println("Tour de " + joueur.getNom() + " pour piocher une carte.");
             boolean prendreDansDefausse = joueur.piocherCarteApresJeter(paquet); // Ajouter l'argument paquet ici
@@ -51,6 +50,15 @@ public class JeuYaniv {
         }
     }
 
+    public void jeterEtPiocher() {
+        do {
+            jeterCartesAvantPartie();
+            piocherCarteApresJeter();
+            joueurCourant = obtenirProchainJoueur(joueurCourant, joueurs, SensJeu.HORAIRE); // Mettreclea à jour le
+                                                                                            // joueur
+                                                                                            // courant
+        } while (joueurCourant.calculerTotalPoints() >= 7);
+    }
     public void jouerPartie() {
 
         boolean declarerYanivOuAssaf = true;
@@ -183,9 +191,11 @@ public class JeuYaniv {
     public static void main(String[] args) {
         JeuYaniv jeu = new JeuYaniv(2);
 
+        
         // Jeter les cartes avant le début de la partie
-        jeu.jeterCartesAvantPartie();
-        jeu.piocherCarteApresJeter();
+        jeu.jeterEtPiocher();
+
+      
 
         // Créer une pioche avec les cartes restantes
         List<Carte> cartesRestantes = jeu.creerPioche();
