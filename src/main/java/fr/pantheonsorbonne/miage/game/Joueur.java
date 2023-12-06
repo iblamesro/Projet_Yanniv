@@ -169,4 +169,46 @@ public abstract class Joueur {
         return prendreDansDefausse;
     }
 
+    public List<Carte> trouverMeilleureCombinaison() {
+        // Exemple : vérifier d'abord si le joueur a une suite
+        if (CombinaisonsDeCartes.estSuite(main)) {
+            // Retourner la suite trouvée
+            return main;
+        }
+
+        // Ajoutez des vérifications pour d'autres combinaisons si nécessaire
+
+        // Si aucune combinaison n'est trouvée
+        return null;
+    }
+
+
+    public void jeterCombinaison(PaquetCartes paquet, List<Carte> combinaison) {
+        // Assurez-vous que les cartes de la combinaison sont présentes dans la main du
+        // joueur
+        if (main.containsAll(combinaison)) {
+            // Retirez les cartes de la combinaison de la main du joueur
+            main.removeAll(combinaison);
+
+            // Ajoutez ces cartes au paquet (ou à la défausse, selon la logique de votre
+            // jeu)
+            paquet.ajouterCartes(combinaison);
+
+            // Affichez le type de combinaison
+            if (CombinaisonsDeCartes.estCarre(combinaison)) {
+                System.out.println(getNom() + " a jeté un carré : " + combinaison);
+            } else if (CombinaisonsDeCartes.estBrelan(combinaison)) {
+                System.out.println(getNom() + " a jeté un brelan : " + combinaison);
+            } else if (CombinaisonsDeCartes.estDouble(combinaison)) {
+                System.out.println(getNom() + " a jeté une paire : " + combinaison);
+            } else if (CombinaisonsDeCartes.estSuite(combinaison)) {
+                System.out.println(getNom() + " a jeté une suite : " + combinaison);
+            } else {
+                System.out.println(getNom() + " a jeté une combinaison non spécifiée : " + combinaison);
+            }
+        } else {
+            System.out.println("Erreur : la combinaison n'est pas valide pour le joueur " + getNom());
+        }
+    }
+
 }

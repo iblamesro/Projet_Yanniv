@@ -3,7 +3,10 @@ package fr.pantheonsorbonne.miage.game;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class BotStrategique extends Joueur {
     @Override
@@ -311,17 +314,88 @@ public class BotStrategique extends Joueur {
         return null;
     }
 
-    @Override
+   
+      @Override
     public Carte choisirCarteAJeter() {
         // Triez la main en ordre décroissant de points
         main.sort(Comparator.comparingInt(Carte::getValeur).reversed());
 
-        // Choisissez la carte avec le plus grand nombre de points
-        Carte carteAJeter = main.get(0);
+        // Vérifiez s'il y a des cartes multiples (paires, triples, etc.)
+        Map<Integer, List<Carte>> cartesParValeur = main.stream()
+                .collect(Collectors.groupingBy(Carte::getValeur));
 
+        // Recherchez la première carte multiple (paires, triples, etc.)
+        Optional<Carte> carteMultiples = cartesParValeur.values().stream()
+                .filter(cartes -> cartes.size() >= 2)
+                .flatMap(cartes -> cartes.stream())
+                .findFirst();
+
+        // Si une carte multiple est trouvée, choisissez-la
+        if (carteMultiples.isPresent()) {
+            Carte carteAJeter = carteMultiples.get();
+            System.out.println(getNom() + " a jeté la carte multiple : " + carteAJeter);
+            return carteAJeter;
+        }
+
+        // Vérifiez s'il y a une paire dans la main
+
+        if (CombinaisonsDeCartes.estDouble(main)) {
+            // Choisissez la carte avec la plus grande valeur dans la paire
+            Carte carteDouble = main.stream()
+                    .filter(carte -> Collections.frequency(main, carte) == 2)
+                    .findFirst()
+                    .orElse(null);
+
+            if (carteDouble != null) {
+                System.out.println(getNom() + " a jeté la carte de la paire : " + carteDouble);
+                return carteDouble;
+            }
+        }
+
+        // Vérifiez s'il y a une suite dans la main
+        if (CombinaisonsDeCartes.estSuite(main)) {
+            // Choisissez la carte avec la plus grande valeur dans la suite
+            Carte carteSuite = main.get(0);
+            System.out.println(getNom() + " a jeté la carte de la suite : " + carteSuite);
+            return carteSuite;
+        }
+
+        // Vérifiez s'il y a un brelan dans la main
+        if (CombinaisonsDeCartes.estBrelan(main)) {
+            // Choisissez la carte avec la plus grande valeur dans le brelan
+            Carte carteBrelan = main.stream()
+                    .filter(carte -> CombinaisonsDeCartes.nombreOccurences(main, carte.getValeur()) == 3)
+                    .findFirst()
+                    .orElse(null);
+
+            if (carteBrelan != null) {
+                System.out.println(getNom() + " a jeté la carte du brelan : " + carteBrelan);
+                return carteBrelan;
+            }
+        }
+
+        // Vérifiez s'il y a un carré dans la main
+        if (CombinaisonsDeCartes.estCarre(main)) {
+            // Choisissez la carte avec la plus grande valeur dans le carré
+            Carte carteCarre = main.stream()
+                    .filter(carte -> CombinaisonsDeCartes.nombreOccurences(main, carte.getValeur()) == 4)
+                    .findFirst()
+                    .orElse(null);
+
+            if (carteCarre != null) {
+                System.out.println(getNom() + " a jeté la carte du carré : " + carteCarre);
+                return carteCarre;
+            }
+        }
+
+        // S'il n'y a pas de combinaisons spéciales, choisissez la carte avec le plus
+        // grand nombre de points
+        Carte carteAJeter = main.get(0);
         System.out.println(getNom() + " a jeté la carte : " + carteAJeter);
         return carteAJeter;
     }
+
+    
 
     @Override
     public boolean piocherCarteApresJeter(PaquetCartes paquet) {

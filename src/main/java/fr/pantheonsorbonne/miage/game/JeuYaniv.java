@@ -36,8 +36,18 @@ public class JeuYaniv {
     public void jeterCartesAvantPartie() {
         for (Joueur joueur : joueurs) {
             System.out.println("Tour de " + joueur.getNom() + " pour jeter une carte avant la partie.");
-            Carte carteAJeter = joueur.choisirCarteAJeter();
-            joueur.jeterCarte(paquet, carteAJeter, true);
+
+            // Vérifiez les combinaisons et choisissez la carte à jeter en conséquence
+            List<Carte> combinaison = joueur.trouverMeilleureCombinaison();
+
+            if (combinaison != null && !combinaison.isEmpty()) {
+                System.out.println(joueur.getNom() + " a trouvé une combinaison : " + combinaison);
+                joueur.jeterCombinaison(paquet, combinaison);
+            } else {
+                // Si aucune combinaison n'est trouvée, choisissez une carte à jeter normalement
+                Carte carteAJeter = joueur.choisirCarteAJeter();
+                joueur.jeterCarte(paquet, carteAJeter, true);
+            }
         }
     }
 

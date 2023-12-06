@@ -63,4 +63,16 @@ public class CombinaisonsDeCartes {
 
     // ... autres méthodes pour d'autres combinaisons
 
+    public static int nombreOccurences(List<Carte> cartes, int valeur) {
+        // Compter le nombre d'occurrences de la valeur dans la liste de cartes
+        int count = 0;
+        for (Carte carte : cartes) {
+            if (carte.getValeur() == valeur) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
 }

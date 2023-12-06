@@ -98,6 +98,10 @@ public class PaquetCartes {
         return cartes.size();
     }
 
+    public void ajouterCartes(List<Carte> nouvellesCartes) {
+        cartes.addAll(nouvellesCartes);
+    }
+
     public List<Carte> creerPioche() {
         List<Carte> cartesRestantes = new ArrayList<>(cartes);
         return cartesRestantes;
