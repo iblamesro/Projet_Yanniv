@@ -324,19 +324,40 @@ public class BotStrategique extends Joueur {
         Map<Integer, List<Carte>> cartesParValeur = main.stream()
                 .collect(Collectors.groupingBy(Carte::getValeur));
 
-        // Recherchez la première carte multiple (paires, triples, etc.)
-        Optional<Carte> carteMultiples = cartesParValeur.values().stream()
-                .filter(cartes -> cartes.size() >= 2)
-                .flatMap(cartes -> cartes.stream())
-                .findFirst();
+        
+    // Recherchez la première carte multiple (paires, triples, etc.)
+    Optional<Map.Entry<Integer, List<Carte>>> carteMultiples = cartesParValeur.entrySet().stream()
+    .filter(entry -> entry.getValue().size() >= 2)
+    .findFirst();
 
-        // Si une carte multiple est trouvée, choisissez-la
-        if (carteMultiples.isPresent()) {
-            Carte carteAJeter = carteMultiples.get();
-            System.out.println(getNom() + " a jeté la carte multiple : " + carteAJeter);
-            return carteAJeter;
-        }
+// Si une carte multiple est trouvée, choisissez-la
+if (carteMultiples.isPresent()) {
+Map.Entry<Integer, List<Carte>> entry = carteMultiples.get();
+List<Carte> cartesMultiples = entry.getValue();
+int valeurMultiple = entry.getKey();
 
+// Déterminez le type de multiple (paire, brelan, carré, etc.)
+String typeMultiple;
+switch (cartesMultiples.size()) {
+    case 2:
+        typeMultiple = "paire";
+        break;
+    case 3:
+        typeMultiple = "brelan";
+        break;
+    case 4:
+        typeMultiple = "carré";
+        break;
+    default:
+        typeMultiple = "inconnu";
+        break;
+}
+
+// Choisissez la carte à jeter parmi les cartes multiples
+Carte carteAJeter = cartesMultiples.get(0);
+System.out.println(getNom() + " a jeté la carte multiple (" + typeMultiple + ") : " + carteAJeter);
+return carteAJeter;
+}
         // Vérifiez s'il y a une paire dans la main
 
         if (CombinaisonsDeCartes.estDouble(main)) {
