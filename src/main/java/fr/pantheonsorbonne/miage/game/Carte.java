@@ -1,4 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
+
 public class Carte implements Comparable<Carte> {
     private String valeur;
     private String couleur;
@@ -29,8 +30,17 @@ public class Carte implements Comparable<Carte> {
                 throw new NumberFormatException("Erreur de conversion de la valeur de la carte en entier.");
             }
         } else {
-            // Retourner une valeur fixe pour les figures (valet, dame, roi)
-            return 10; // par exemple, toutes les figures valent 10
+            // Retourner une valeur pour les figures (valet, dame, roi)
+            switch (valeur) {
+                case "J":
+                    return 11;
+                case "Q":
+                    return 12;
+                case "K":
+                    return 13;
+                default:
+                    return 0; // Par exemple,si figure inconnu valent 0
+            }
         }
     }
 

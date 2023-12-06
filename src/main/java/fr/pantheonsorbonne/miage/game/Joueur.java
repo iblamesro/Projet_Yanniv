@@ -48,7 +48,6 @@ public abstract class Joueur {
 
     // Méthode abstraite pour la déclaration de Yaniv ou Assaf
     public abstract void declarerYanivOuAssaf(Joueur joueurGagnant);
-
     public int calculerTotalPoints() {
         int totalPoints = 0;
         int nombreJokers = 0;
@@ -68,25 +67,34 @@ public abstract class Joueur {
         return totalPoints;
     }
 
-    private int attribuerPointsSelonValeur(Carte carte, int valeurMain) {
+    private int attribuerPointsSelonValeur(Carte carte, int totalPoints) {
         int valeurCarte = carte.getValeur();
 
-        if (valeurCarte == 1) {
-            return 1; // As : 1 point
-        } else if (valeurCarte >= 2 && valeurCarte <= 10) {
-            return valeurCarte; // 2 au 10 : la valeur inscrite sur la carte
-        } else if (valeurCarte == 11) {
-            // Valet : -2, si la valeur de votre main, -2 compris est moins de 5.
-            // Valet : 15, si la valeur de votre main, -2 compris est supérieure à 5.
-            return (valeurMain - 2 < 5) ? -2 : 15;
-        } else if (valeurCarte == 12 || valeurCarte == 13) {
-            return 10; // Dame et Roi : 10 points
-        } else if (valeurCarte == 14) {
-            return 2; // Joker : 2 points
+        switch (valeurCarte) {
+            case 1:
+                return 1; // As : 1 point
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                return valeurCarte; // 2 au 10 : la valeur inscrite sur la carte
+            case 11:
+                return 11; // Valet : 11 points
+            case 12:
+            case 13:
+                return 10; // Dame et Roi : 10 points
+            case 14:
+                return 2; // Joker : 2 points
+            default:
+                return 0; // Valeurs non prises en compte
         }
-
-        return 0; // Valeurs non prises en compte
     }
+
 
     private int ajusterPointsJoker(int totalPoints, int nombreJokers) {
         // Si le nombre de Jokers est supérieur à 1, ajuster le total des points
