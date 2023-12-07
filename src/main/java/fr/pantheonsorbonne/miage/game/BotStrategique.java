@@ -1,4 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
+
 // Implémentation du BotStrategique
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +10,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BotStrategique extends Joueur {
+    Joueur botProchainJoueur;
+    BotStrategique prochainJoueur;
     @Override
     public boolean demanderAssaf() {
         return false;
@@ -163,7 +166,7 @@ public class BotStrategique extends Joueur {
             }
         }
 
-        private Joueur obtenirProchainJoueur() {
+        public Joueur obtenirProchainJoueur() {
             int indexJoueurCourant = joueurs.indexOf(this); // Assurez-vous que "this" se réfère à l'instance actuelle
                                                             // de Joueur
 
@@ -190,14 +193,22 @@ public class BotStrategique extends Joueur {
     }
 
     private void sauterTourProchainJoueur(Joueur prochainJoueur) {
-        System.out.println("Le prochain joueur, " + prochainJoueur.getNom() + ", a son tour sauté !");
-        prochainJoueur.sauterTour();
+        if (prochainJoueur != null) {
+            System.out.println("Le tour de " + prochainJoueur.getNom() + " est sauté !");
+            prochainJoueur.setTourSauté(true);
+        } else {
+            System.out.println("Erreur : le prochain joueur est null.");
+        }
     }
 
     private void forcerPiocheProchainJoueur(PaquetCartes paquet, Joueur prochainJoueur) {
-        Carte cartePiochee = paquet.piocherCarte();
-        prochainJoueur.main.add(cartePiochee);
-        System.out.println(prochainJoueur.getNom() + " doit piocher une carte !");
+        if (prochainJoueur != null) {
+            System.out.println(prochainJoueur.getNom() + " doit piocher une carte de la pioche.");
+            // Logique de la méthode...
+        } else {
+            System.out.println("Erreur : le prochain joueur est null.");
+        }
+
     }
 
     private void piocherEchangerProchainJoueur(Joueur prochainJoueur) {
@@ -314,8 +325,7 @@ public class BotStrategique extends Joueur {
         return null;
     }
 
-   
-      @Override
+    @Override
     public Carte choisirCarteAJeter() {
         // Triez la main en ordre décroissant de points
         main.sort(Comparator.comparingInt(Carte::getValeur).reversed());
@@ -324,40 +334,60 @@ public class BotStrategique extends Joueur {
         Map<Integer, List<Carte>> cartesParValeur = main.stream()
                 .collect(Collectors.groupingBy(Carte::getValeur));
 
-        
-    // Recherchez la première carte multiple (paires, triples, etc.)
-    Optional<Map.Entry<Integer, List<Carte>>> carteMultiples = cartesParValeur.entrySet().stream()
-    .filter(entry -> entry.getValue().size() >= 2)
-    .findFirst();
+        // Recherchez la première carte multiple (paires, triples, etc.)
+        Optional<Map.Entry<Integer, List<Carte>>> carteMultiples = cartesParValeur.entrySet().stream()
+                .filter(entry -> entry.getValue().size() >= 2)
+                .findFirst();
 
-// Si une carte multiple est trouvée, choisissez-la
-if (carteMultiples.isPresent()) {
-Map.Entry<Integer, List<Carte>> entry = carteMultiples.get();
-List<Carte> cartesMultiples = entry.getValue();
-int valeurMultiple = entry.getKey();
+        // Si une carte multiple est trouvée, choisissez-la
+        if (carteMultiples.isPresent()) {
+            Map.Entry<Integer, List<Carte>> entry = carteMultiples.get();
+            List<Carte> cartesMultiples = entry.getValue();
+            int valeurMultiple = entry.getKey();
 
-// Déterminez le type de multiple (paire, brelan, carré, etc.)
-String typeMultiple;
-switch (cartesMultiples.size()) {
-    case 2:
-        typeMultiple = "paire";
-        break;
-    case 3:
-        typeMultiple = "brelan";
-        break;
-    case 4:
-        typeMultiple = "carré";
-        break;
-    default:
-        typeMultiple = "inconnu";
-        break;
-}
+            // Déterminez le type de multiple (paire, brelan, carré, etc.)
+            String typeMultiple;
+            switch (cartesMultiples.size()) {
+                case 2:
+                    typeMultiple = "paire";
+                    break;
+                case 3:
+                    typeMultiple = "brelan";
+                    break;
+                case 4:
+                    typeMultiple = "carré";
+                    break;
+                default:
+                    typeMultiple = "inconnu";
+                    break;
+            }
+            // Vérifiez si la carte de la paire est 7
+        if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 7) {
+             // Changez le sens du jeu
+             System.out.println("La paire contient un 7. Le sens du jeu change !");
+             changerSensJeu();
+        }
+           // Vérifiez si la carte de la paire est 8
+           if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 8) {
+            // Sauter le tour du prochain joueur
+            System.out.println("La paire contient un 8. Le prochain joueur sautera son tour !");
+            sauterTourProchainJoueur(botProchainJoueur);
+        }
+        // Vérifiez si la carte de la paire est 9
+        if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 9) {
+            // Forcer le prochain joueur à piocher une carte de la pioche
+            System.out.println("La paire contient un 9. Le prochain joueur piochera une carte de la pioche !");
+            forcerPiocheProchainJoueur(null, botProchainJoueur);
+        }
+    
 
-// Choisissez la carte à jeter parmi les cartes multiples
-Carte carteAJeter = cartesMultiples.get(0);
-System.out.println(getNom() + " a jeté la carte multiple (" + typeMultiple + ") : " + carteAJeter);
-return carteAJeter;
-}
+
+      
+            // Choisissez la carte à jeter parmi les cartes multiples
+            Carte carteAJeter = cartesMultiples.get(0);
+            System.out.println(getNom() + " a jeté la carte multiple (" + typeMultiple + ") : " + carteAJeter);
+            return carteAJeter;
+        }
         // Vérifiez s'il y a une paire dans la main
 
         if (CombinaisonsDeCartes.estDouble(main)) {
@@ -366,12 +396,13 @@ return carteAJeter;
                     .filter(carte -> Collections.frequency(main, carte) == 2)
                     .findFirst()
                     .orElse(null);
-
+               
             if (carteDouble != null) {
                 System.out.println(getNom() + " a jeté la carte de la paire : " + carteDouble);
                 return carteDouble;
             }
-        }
+    }
+        
 
         // Vérifiez s'il y a une suite dans la main
         if (CombinaisonsDeCartes.estSuite(main)) {
@@ -415,8 +446,6 @@ return carteAJeter;
         System.out.println(getNom() + " a jeté la carte : " + carteAJeter);
         return carteAJeter;
     }
-
-    
 
     @Override
     public boolean piocherCarteApresJeter(PaquetCartes paquet) {

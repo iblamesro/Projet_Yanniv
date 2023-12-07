@@ -211,4 +211,8 @@ public abstract class Joueur {
         }
     }
 
+    public void setTourSauté(boolean b) {
+    }
+
+    
 }

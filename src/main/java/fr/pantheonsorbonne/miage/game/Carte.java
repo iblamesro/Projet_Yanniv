@@ -79,77 +79,76 @@ public class Carte implements Comparable<Carte> {
         return false;
     }
 
-    // Nouvelle méthode pour attribuer une icône (vous pouvez ajuster la logique selon vos besoins)
-    private String assignIcone() {
+   private String assignIcone() {
         switch (couleur) {
             case "Coeur":
-            return switch (valeur) {
-                case "A" -> "🂱";
-                case "2" -> "🂲";
-                case "3" -> "🂳";
-                case "4" -> "🂴";
-                case "5" -> "🂵";
-                case "6" -> "🂶";
-                case "7" -> "🂷";
-                case "8" -> "🂸";
-                case "9" -> "🂹";
-                case "10" -> "🂺";
-                case "J" -> "🂻";
-                case "Q" -> "🂽";
-                case "K" -> "🂾";
-                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
-            };
+                return switch (valeur) {
+                    case "A" -> "🂱";
+                    case "2" -> "🂲";
+                    case "3" -> "🂳";
+                    case "4" -> "🂴";
+                    case "5" -> "🂵";
+                    case "6" -> "🂶";
+                    case "7" -> "🂷";
+                    case "8" -> "🂸";
+                    case "9" -> "🂹";
+                    case "10" -> "🂺";
+                    case "J" -> "🂻";
+                    case "Q" -> "🂽";
+                    case "K" -> "🂾";
+                    default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+                };
             case "Pique":
-            return switch (valeur) {
-                case "A" -> "🂡";
-                case "2" -> "🂢";
-                case "3" -> "🂣";
-                case "4" -> "🂤";
-                case "5" -> "🂥";
-                case "6" -> "🂦";
-                case "7" -> "🂧";
-                case "8" -> "🂨";
-                case "9" -> "🂩";
-                case "10" -> "🂪";
-                case "J" -> "🂫";
-                case "Q" -> "🂭";
-                case "K" -> "🂮";
-                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
-            };
+                return switch (valeur) {
+                    case "A" -> "🂡";
+                    case "2" -> "🂢";
+                    case "3" -> "🂣";
+                    case "4" -> "🂤";
+                    case "5" -> "🂥";
+                    case "6" -> "🂦";
+                    case "7" -> "🂧";
+                    case "8" -> "🂨";
+                    case "9" -> "🂩";
+                    case "10" -> "🂪";
+                    case "J" -> "🂫";
+                    case "Q" -> "🂭";
+                    case "K" -> "🂮";
+                    default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+                };
             case "Carreau":
-            return switch (valeur) {
-                case "A" -> "🃁";
-                case "2" -> "🃂";
-                case "3" -> "🃃";
-                case "4" -> "🃄";
-                case "5" -> "🃅";
-                case "6" -> "🃆";
-                case "7" -> "🃇";
-                case "8" -> "🃈";
-                case "9" -> "🃉";
-                case "10" -> "🃊";
-                case "J" -> "🃋";
-                case "Q" -> "🃍";
-                case "K" -> "🃎";
-                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
-            };
+                return switch (valeur) {
+                    case "A" -> "🃁";
+                    case "2" -> "🃂";
+                    case "3" -> "🃃";
+                    case "4" -> "🃄";
+                    case "5" -> "🃅";
+                    case "6" -> "🃆";
+                    case "7" -> "🃇";
+                    case "8" -> "🃈";
+                    case "9" -> "🃉";
+                    case "10" -> "🃊";
+                    case "J" -> "🃋";
+                    case "Q" -> "🃍";
+                    case "K" -> "🃎";
+                    default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+                };
             case "Trèfle":
-            return switch (valeur) {
-                case "A" -> "🃑";
-                case "2" -> "🃒";
-                case "3" -> "🃓";
-                case "4" -> "🃔";
-                case "5" -> "🃕";
-                case "6" -> "🃖";
-                case "7" -> "🃗";
-                case "8" -> "🃘";
-                case "9" -> "🃙";
-                case "10" -> "🃚";
-                case "J" -> "🃛";
-                case "Q" -> "🃝";
-                case "K" -> "🃞";
-                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
-            };
+                return switch (valeur) {
+                    case "A" -> "🃑";
+                    case "2" -> "🃒";
+                    case "3" -> "🃓";
+                    case "4" -> "🃔";
+                    case "5" -> "🃕";
+                    case "6" -> "🃖";
+                    case "7" -> "🃗";
+                    case "8" -> "🃘";
+                    case "9" -> "🃙";
+                    case "10" -> "🃚";
+                    case "J" -> "🃛";
+                    case "Q" -> "🃝";
+                    case "K" -> "🃞";
+                    default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+                };
             default:
                 throw new IllegalArgumentException("Couleur de carte non reconnue : " + couleur);
         }

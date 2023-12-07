@@ -1,4 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -73,6 +74,5 @@ public class CombinaisonsDeCartes {
         }
         return count;
     }
-
 
 }
