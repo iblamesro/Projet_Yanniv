@@ -111,7 +111,7 @@ public class BotStrategique extends Joueur {
             // Gestion du double 9-9
             if (carteAJouer.getValeur() == 9 && carteAJouer.estJusteApres(carteAJouer)) {
                 // Forcer le prochain joueur à piocher une carte de la pioche
-                forcerPiocheProchainJoueur(null, botProchainJoueur);
+                forcerPiocheJoueurSuivant(null);
             }
 
             // Gestion du double 10-10
@@ -166,14 +166,11 @@ public class BotStrategique extends Joueur {
     }
 
 
-    private void forcerPiocheProchainJoueur(PaquetCartes paquet, Joueur prochainJoueur) {
-        if (prochainJoueur != null) {
-            System.out.println(prochainJoueur.getNom() + " doit piocher une carte de la pioche.");
-            // Logique de la méthode...
-        } else {
-            System.out.println("Erreur : le prochain joueur est null.");
-        }
-
+   
+    private void forcerPiocheJoueurSuivant(PaquetCartes paquet) {
+        Joueur joueurSuivant = obtenirJoueurSuivant();
+        System.out.println("Forcer " + joueurSuivant.getNom() + " à piocher une carte de la pioche.");
+        joueurSuivant.piocherCarte(paquet);
     }
 
     private void piocherEchangerProchainJoueur(Joueur prochainJoueur) {
@@ -206,7 +203,7 @@ public class BotStrategique extends Joueur {
             System.out.println(getNom() + " joue la suite 10-J-Q avec le K de Pique !");
             main.remove(carteK);
         } else {
-            forcerPiocheProchainJoueur(paquet, prochainJoueur);
+            forcerPiocheJoueurSuivant(paquet);
         }
     }
 
@@ -336,6 +333,13 @@ public class BotStrategique extends Joueur {
                 // Sauter le tour du prochain joueur
                 System.out.println("La paire contient un 8. Le prochain joueur sautera son tour !");
                 sauterTourJoueurSuivant();
+            }
+            // Vérifiez si la carte de la paire est 9
+            PaquetCartes paquetDeCartes = new PaquetCartes();
+            if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 9) {
+                // forcer le joueur suivant a pioche une carte de la pioche
+                System.out.println("La paire contient un 9. Le prochain joueur sera obligé de pioché dans la pioche !!");
+                forcerPiocheJoueurSuivant(paquetDeCartes);
             }
 
             // Choisissez la carte à jeter parmi les cartes multiples
