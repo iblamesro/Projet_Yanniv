@@ -148,25 +148,7 @@ public class BotStrategique extends Joueur {
         sensJeu = sens;
     }
 
-    // Les méthodes de gestion des règles spécifiques à implémenter
-    public class JeuYaniv {
-        // ...
-        private int sensJeu = SensJeu.HORAIRE;
-
-        private void changerSensJeu() {
-            System.out.println("Le sens du jeu a changé !");
-            int sensActuel = getSensJeu();
-
-            if (sensActuel == SensJeu.HORAIRE) {
-                setSensJeu(SensJeu.ANTIHORAIRE);
-                System.out.println("Le sens du jeu est maintenant anti-horaire.");
-            } else {
-                setSensJeu(SensJeu.HORAIRE);
-                System.out.println("Le sens du jeu est maintenant horaire.");
-            }
-        }
-
-        public Joueur obtenirProchainJoueur() {
+    public Joueur obtenirProchainJoueur() {
             int indexJoueurCourant = joueurs.indexOf(this); // Assurez-vous que "this" se réfère à l'instance actuelle
                                                             // de Joueur
 
@@ -182,16 +164,7 @@ public class BotStrategique extends Joueur {
             return null;
         }
 
-        public int getSensJeu() {
-            return sensJeu;
-        }
-
-        public void setSensJeu(int sens) {
-            sensJeu = sens;
-        }
-        // ...
-    }
-
+       
     private void sauterTourProchainJoueur(Joueur prochainJoueur) {
         if (prochainJoueur != null) {
             System.out.println("Le tour de " + prochainJoueur.getNom() + " est sauté !");
