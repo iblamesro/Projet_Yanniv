@@ -10,8 +10,18 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BotStrategique extends Joueur {
+    private static List<Joueur> joueurs;
+    private int sensJeu = SensJeu.HORAIRE;
+
+    public BotStrategique(String nom) {
+        super(nom, true);
+    }
     Joueur botProchainJoueur;
     BotStrategique prochainJoueur;
+
+    public void setJoueurs(List<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
     @Override
     public boolean demanderAssaf() {
         return false;
@@ -26,12 +36,7 @@ public class BotStrategique extends Joueur {
         // Retournez true s'il veut déclarer Assaf, sinon false
     }
 
-    private static List<Joueur> joueurs;
-    private int sensJeu = SensJeu.HORAIRE;
-
-    public BotStrategique(String nom) {
-        super(nom, true);
-    }
+    
 
     @Override
     public void jouerTour(PaquetCartes paquet, Joueur prochainJoueur) {
@@ -100,7 +105,7 @@ public class BotStrategique extends Joueur {
             // Gestion du double 8-8
             if (carteAJouer.getValeur() == 8 && carteAJouer.estJusteApres(carteAJouer)) {
                 // Sauter le tour du prochain joueur
-                sauterTourProchainJoueur(botProchainJoueur);
+                sauterTourJoueurSuivant();
             }
 
             // Gestion du double 9-9
@@ -148,31 +153,18 @@ public class BotStrategique extends Joueur {
         sensJeu = sens;
     }
 
-    public Joueur obtenirProchainJoueur() {
-            int indexJoueurCourant = joueurs.indexOf(this); // Assurez-vous que "this" se réfère à l'instance actuelle
-                                                            // de Joueur
-
-            if (indexJoueurCourant != -1) {
-                // Calculer l'index du prochain joueur en fonction du sens du jeu
-                int indexProchainJoueur = (sensJeu == SensJeu.ANTIHORAIRE)
-                        ? (indexJoueurCourant + 1) % joueurs.size()
-                        : (indexJoueurCourant - 1 + joueurs.size()) % joueurs.size();
-
-                return joueurs.get(indexProchainJoueur);
-            }
-
-            return null;
-        }
-
-       
-    private void sauterTourProchainJoueur(Joueur prochainJoueur) {
-        if (prochainJoueur != null) {
-            System.out.println("Le tour de " + prochainJoueur.getNom() + " est sauté !");
-            prochainJoueur.setTourSauté(true);
-        } else {
-            System.out.println("Erreur : le prochain joueur est null.");
-        }
+    private Joueur obtenirJoueurSuivant() {
+        int indexJoueurActuel = joueurs.indexOf(this);
+        int indexJoueurSuivant = (indexJoueurActuel + 1) % joueurs.size();
+        return joueurs.get(indexJoueurSuivant);
     }
+
+    private void sauterTourJoueurSuivant() {
+        Joueur joueurSuivant = obtenirJoueurSuivant();
+        System.out.println("Le tour de " + joueurSuivant.getNom() + " est sauté !");
+        joueurSuivant.setTourSauté(true);
+    }
+
 
     private void forcerPiocheProchainJoueur(PaquetCartes paquet, Joueur prochainJoueur) {
         if (prochainJoueur != null) {
@@ -297,8 +289,7 @@ public class BotStrategique extends Joueur {
         // Si prochainJoueur n'est pas un BotStrategique, retournez null ou une autre
         return null;
     }
-
-    @Override
+ @Override
     public Carte choisirCarteAJeter() {
         // Triez la main en ordre décroissant de points
         main.sort(Comparator.comparingInt(Carte::getValeur).reversed());
@@ -335,27 +326,18 @@ public class BotStrategique extends Joueur {
                     break;
             }
             // Vérifiez si la carte de la paire est 7
-        if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 7) {
-             // Changez le sens du jeu
-             System.out.println("La paire contient un 7. Le sens du jeu change !");
-             changerSensJeu();
-        }
-           // Vérifiez si la carte de la paire est 8
-           if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 8) {
-            // Sauter le tour du prochain joueur
-            System.out.println("La paire contient un 8. Le prochain joueur sautera son tour !");
-            sauterTourProchainJoueur(botProchainJoueur);
-        }
-        // Vérifiez si la carte de la paire est 9
-        if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 9) {
-            // Forcer le prochain joueur à piocher une carte de la pioche
-            System.out.println("La paire contient un 9. Le prochain joueur piochera une carte de la pioche !");
-            forcerPiocheProchainJoueur(null, botProchainJoueur);
-        }
-    
+            if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 7) {
+                // Changez le sens du jeu
+                System.out.println("La paire contient un 7. Le sens du jeu change !");
+                changerSensJeu();
+            }
+            // Vérifiez si la carte de la paire est 8
+            if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 8) {
+                // Sauter le tour du prochain joueur
+                System.out.println("La paire contient un 8. Le prochain joueur sautera son tour !");
+                sauterTourJoueurSuivant();
+            }
 
-
-      
             // Choisissez la carte à jeter parmi les cartes multiples
             Carte carteAJeter = cartesMultiples.get(0);
             System.out.println(getNom() + " a jeté la carte multiple (" + typeMultiple + ") : " + carteAJeter);
@@ -369,13 +351,12 @@ public class BotStrategique extends Joueur {
                     .filter(carte -> Collections.frequency(main, carte) == 2)
                     .findFirst()
                     .orElse(null);
-               
+
             if (carteDouble != null) {
                 System.out.println(getNom() + " a jeté la carte de la paire : " + carteDouble);
                 return carteDouble;
             }
-    }
-        
+        }
 
         // Vérifiez s'il y a une suite dans la main
         if (CombinaisonsDeCartes.estSuite(main)) {
