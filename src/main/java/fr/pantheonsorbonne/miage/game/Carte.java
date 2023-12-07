@@ -1,8 +1,11 @@
 package fr.pantheonsorbonne.miage.game;
 
+import java.util.Random;
+
 public class Carte implements Comparable<Carte> {
     private String valeur;
     private String couleur;
+    private String icone; // Nouveau champ icone
 
     public Carte(String valeur, String couleur) {
         if (valeur == null || valeur.isEmpty()) {
@@ -10,11 +13,13 @@ public class Carte implements Comparable<Carte> {
         }
         this.valeur = valeur;
         this.couleur = couleur;
+        this.icone = assignIcone(); // Attribuer une icône lors de la création de la carte
+    
     }
 
     @Override
     public String toString() {
-        return valeur + " de " + couleur;
+        return "" + icone + " " + valeur + " de " + couleur;
     }
 
     public String getCouleur() {
@@ -72,5 +77,81 @@ public class Carte implements Comparable<Carte> {
         // Si aucune des conditions ci-dessus n'est satisfaite, la carte n'est pas juste
         // après
         return false;
+    }
+
+    // Nouvelle méthode pour attribuer une icône (vous pouvez ajuster la logique selon vos besoins)
+    private String assignIcone() {
+        switch (couleur) {
+            case "Coeur":
+            return switch (valeur) {
+                case "A" -> "🂱";
+                case "2" -> "🂲";
+                case "3" -> "🂳";
+                case "4" -> "🂴";
+                case "5" -> "🂵";
+                case "6" -> "🂶";
+                case "7" -> "🂷";
+                case "8" -> "🂸";
+                case "9" -> "🂹";
+                case "10" -> "🂺";
+                case "J" -> "🂻";
+                case "Q" -> "🂽";
+                case "K" -> "🂾";
+                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+            };
+            case "Pique":
+            return switch (valeur) {
+                case "A" -> "🂡";
+                case "2" -> "🂢";
+                case "3" -> "🂣";
+                case "4" -> "🂤";
+                case "5" -> "🂥";
+                case "6" -> "🂦";
+                case "7" -> "🂧";
+                case "8" -> "🂨";
+                case "9" -> "🂩";
+                case "10" -> "🂪";
+                case "J" -> "🂫";
+                case "Q" -> "🂭";
+                case "K" -> "🂮";
+                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+            };
+            case "Carreau":
+            return switch (valeur) {
+                case "A" -> "🃁";
+                case "2" -> "🃂";
+                case "3" -> "🃃";
+                case "4" -> "🃄";
+                case "5" -> "🃅";
+                case "6" -> "🃆";
+                case "7" -> "🃇";
+                case "8" -> "🃈";
+                case "9" -> "🃉";
+                case "10" -> "🃊";
+                case "J" -> "🃋";
+                case "Q" -> "🃍";
+                case "K" -> "🃎";
+                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+            };
+            case "Trèfle":
+            return switch (valeur) {
+                case "A" -> "🃑";
+                case "2" -> "🃒";
+                case "3" -> "🃓";
+                case "4" -> "🃔";
+                case "5" -> "🃕";
+                case "6" -> "🃖";
+                case "7" -> "🃗";
+                case "8" -> "🃘";
+                case "9" -> "🃙";
+                case "10" -> "🃚";
+                case "J" -> "🃛";
+                case "Q" -> "🃝";
+                case "K" -> "🃞";
+                default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
+            };
+            default:
+                throw new IllegalArgumentException("Couleur de carte non reconnue : " + couleur);
+        }
     }
 }
