@@ -119,10 +119,6 @@ public abstract class Joueur {
     public void sauterTour() {
     }
 
-    public static int indexOf(BotStrategique.JeuYaniv jeuYaniv) {
-        return 0;
-    }
-
     protected int getPoints() {
         int totalPoints = 0;
 
@@ -211,4 +207,8 @@ public abstract class Joueur {
         }
     }
 
+    public void setTourSauté(boolean b) {
+    }
+
+    
 }

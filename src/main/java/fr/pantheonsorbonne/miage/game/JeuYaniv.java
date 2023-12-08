@@ -17,6 +17,8 @@ public class JeuYaniv {
                                                   // strategique
             joueurs.add(new BotPasStrategique("Joueur " + (i)));
             joueurs.add(new BotStrategique("Joueur " + (i + 1)));
+            BotStrategique botStrategique = new BotStrategique("Joueur " + i);
+            botStrategique.setJoueurs(joueurs);
             int tailleJoueurs = joueurs.size();
             System.out.println("Taille de la liste joueurs : " + tailleJoueurs);
 
