@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import fr.pantheonsorbonne.miage.game.Carte;
 import fr.pantheonsorbonne.miage.game.Joueur;
 import fr.pantheonsorbonne.miage.game.PaquetCartes;
 

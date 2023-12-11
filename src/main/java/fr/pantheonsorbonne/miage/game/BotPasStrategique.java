@@ -16,10 +16,7 @@ public class BotPasStrategique extends Joueur {
         super(nom, true);
     }
 
-    public BotPasStrategique(String nom, List<Joueur> joueurs) {
-        super(nom, true);
-        this.joueurs = joueurs;
-    }
+    
 
     @Override
     public boolean demanderYaniv() {

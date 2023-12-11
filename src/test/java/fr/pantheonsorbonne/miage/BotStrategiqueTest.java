@@ -93,9 +93,9 @@ public class BotStrategiqueTest {
     public void testObtenirProchainJoueur() {
         // Créez une liste de joueurs (par exemple, trois joueurs)
         List<Joueur> joueurs = new ArrayList<>();
-        joueurs.add(new BotPasStrategique("Joueur1", joueurs));
-        joueurs.add(new BotPasStrategique("Joueur2", joueurs));
-        joueurs.add(new BotPasStrategique("Joueur3", joueurs));
+        joueurs.add(new BotPasStrategique("Joueur1"));
+        joueurs.add(new BotPasStrategique("Joueur2"));
+        joueurs.add(new BotPasStrategique("Joueur3"));
 
         // Initialisez la liste de joueurs dans chaque instance de BotPasStrategique
         for (Joueur joueur : joueurs) {
@@ -128,7 +128,7 @@ public class BotStrategiqueTest {
     @Test
     public void testChoisirCarteAJouer() {
         // Créez une instance de BotPasStrategique
-        BotStrategique bot = new BotStrategique("BotTest", new ArrayList<>());
+        BotStrategique bot = new BotStrategique("BotTest");
 
         // Ajoutez quelques cartes à la main du bot
         Carte carte1 = new Carte("2", "Coeur");
@@ -142,7 +142,7 @@ public class BotStrategiqueTest {
     @Test
     public void testDefausserCarteAuHasard() {
         // Créez une instance de BotPasStrategique
-        BotStrategique bot = new BotStrategique("BotTest", new ArrayList<>());
+        BotStrategique bot = new BotStrategique("BotTest");
 
         // Ajoutez quelques cartes à la main du bot
         Carte carte1 = new Carte("2", "Coeur");
@@ -222,5 +222,27 @@ public class BotStrategiqueTest {
         // Vérifiez que le message dans la console est correct
         // Assurez-vous que le joueur n'est pas considéré comme gagnant
     }
+    @Test
+    public void testObtenirJoueurSuivant() {
+        // Créez une liste d'instances de Joueur
+        List<Joueur> joueurs = new ArrayList<>();
+        joueurs.add(new BotStrategique("Joueur1"));
+        joueurs.add(new BotStrategique("Joueur2"));
+    
+
+        // Initialisez la liste de joueurs dans chaque instance de BotStrategique
+        for (Joueur joueur : joueurs) {
+            ((BotStrategique) joueur).setJoueurs(joueurs);
+        }
+
+        // Choisissez un BotStrategique de la liste pour le test
+        BotStrategique bot = (BotStrategique) joueurs.get(0);
+
+        // Testez la méthode obtenirJoueurSuivant()
+        Joueur joueurSuivant1 = bot.obtenirJoueurSuivant();
+        assertEquals("Joueur2", joueurSuivant1.getNom(), "Le joueur suivant devrait être Joueur2");
+
+    }
+    
     
 }

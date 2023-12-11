@@ -94,9 +94,9 @@ public class BotPasStrategiqueTest {
     public void testObtenirProchainJoueur() {
         // Créez une liste de joueurs (par exemple, trois joueurs)
         List<Joueur> joueurs = new ArrayList<>();
-        joueurs.add(new BotPasStrategique("Joueur1", joueurs));
-        joueurs.add(new BotPasStrategique("Joueur2", joueurs));
-        joueurs.add(new BotPasStrategique("Joueur3", joueurs));
+        joueurs.add(new BotPasStrategique("Joueur1"));
+        joueurs.add(new BotPasStrategique("Joueur2"));
+
 
         // Initialisez la liste de joueurs dans chaque instance de BotPasStrategique
         for (Joueur joueur : joueurs) {
@@ -110,7 +110,7 @@ public class BotPasStrategiqueTest {
     @Test
     public void testChoisirCarteAJouer() {
         // Créez une instance de BotPasStrategique
-        BotPasStrategique bot = new BotPasStrategique("BotTest", new ArrayList<>());
+        BotPasStrategique bot = new BotPasStrategique("BotTest");
 
         // Ajoutez quelques cartes à la main du bot
         Carte carte1 = new Carte("2", "Coeur");
@@ -124,7 +124,7 @@ public class BotPasStrategiqueTest {
     @Test
     public void testDefausserCarteAuHasard() {
         // Créez une instance de BotPasStrategique
-        BotPasStrategique bot = new BotPasStrategique("BotTest", new ArrayList<>());
+        BotPasStrategique bot = new BotPasStrategique("BotTest");
 
         // Ajoutez quelques cartes à la main du bot
         Carte carte1 = new Carte("2", "Coeur");
@@ -143,7 +143,7 @@ public class BotPasStrategiqueTest {
     @Test
     public void testPiocherCarteApresJeter() {
         // Créez une instance de BotPasStrategique
-        BotPasStrategique bot = new BotPasStrategique("BotTest", new ArrayList<>());
+        BotPasStrategique bot = new BotPasStrategique("BotTest");
 
         // Créez un paquet de cartes et défaussez une carte au hasard
         PaquetCartes paquet = new PaquetCartes();

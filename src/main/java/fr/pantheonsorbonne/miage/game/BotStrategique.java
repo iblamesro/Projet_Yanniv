@@ -23,11 +23,6 @@ public class BotStrategique extends Joueur {
     Joueur botProchainJoueur;
     BotStrategique prochainJoueur;
 
-    public BotStrategique(String nom, List<Joueur> joueurs) {
-        super(nom, true);
-        this.joueurs = joueurs;
-    }
-
     @Override
     public boolean demanderAssaf() {
         return false;
@@ -114,7 +109,7 @@ public class BotStrategique extends Joueur {
         sensJeu = sens;
     }
 
-    private Joueur obtenirJoueurSuivant() {
+    public Joueur obtenirJoueurSuivant() {
         int indexJoueurActuel = joueurs.indexOf(this);
         int indexJoueurSuivant = (indexJoueurActuel + 1) % joueurs.size();
         return joueurs.get(indexJoueurSuivant);
