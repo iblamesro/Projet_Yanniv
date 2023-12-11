@@ -21,7 +21,7 @@ public class CombinaisonsDeCartes {
     }
 
     public static boolean estDouble(List<Carte> cartes) {
-        // Triez les cartes par valeur
+        // Trie les cartes par valeur
         Collections.sort(cartes);
 
         // Vérifiez si au moins deux cartes ont la même valeur
@@ -34,10 +34,9 @@ public class CombinaisonsDeCartes {
     }
 
     public static boolean estBrelan(List<Carte> cartes) {
-        // Triez les cartes par valeur
         Collections.sort(cartes);
 
-        // Vérifiez si au moins trois cartes ont la même valeur
+        // Vérifie si au moins trois cartes ont la même valeur
         for (int i = 0; i < cartes.size() - 2; i++) {
             if (cartes.get(i).getValeur() == cartes.get(i + 1).getValeur()
                     && cartes.get(i).getValeur() == cartes.get(i + 2).getValeur()) {
@@ -48,10 +47,9 @@ public class CombinaisonsDeCartes {
     }
 
     public static boolean estCarre(List<Carte> cartes) {
-        // Triez les cartes par valeur
         Collections.sort(cartes);
 
-        // Vérifiez si au moins quatre cartes ont la même valeur
+        // Vérifie si au moins quatre cartes ont la même valeur
         for (int i = 0; i < cartes.size() - 3; i++) {
             if (cartes.get(i).getValeur() == cartes.get(i + 1).getValeur()
                     && cartes.get(i).getValeur() == cartes.get(i + 2).getValeur()
@@ -62,10 +60,9 @@ public class CombinaisonsDeCartes {
         return false;
     }
 
-    // ... autres méthodes pour d'autres combinaisons
 
     public static int nombreOccurences(List<Carte> cartes, int valeur) {
-        // Compter le nombre d'occurrences de la valeur dans la liste de cartes
+        // Compte le nombre d'occurrences de la valeur dans la liste de cartes
         int count = 0;
         for (Carte carte : cartes) {
             if (carte.getValeur() == valeur) {

@@ -3,7 +3,7 @@ package fr.pantheonsorbonne.miage.game;
 public class Carte implements Comparable<Carte> {
     private String valeur;
     private String couleur;
-    private String icone; // Nouveau champ icone
+    private String icone; //champ icone
 
     public Carte(String valeur, String couleur) {
         if (valeur == null || valeur.isEmpty()) {
@@ -11,7 +11,7 @@ public class Carte implements Comparable<Carte> {
         }
         this.valeur = valeur;
         this.couleur = couleur;
-        this.icone = assignIcone(); // Attribuer une icône lors de la création de la carte
+        this.icone = assignIcone(); // Attribue une icône lors de la création de la carte
 
     }
 
@@ -37,7 +37,7 @@ public class Carte implements Comparable<Carte> {
                 throw new NumberFormatException("Erreur de conversion de la valeur de la carte en entier.");
             }
         } else {
-            // Retourner une valeur pour les figures (valet, dame, roi)
+            // Retourne une valeur pour les figures (valet, dame, roi)
             switch (valeur) {
                 case "J":
                     return 11;
@@ -56,11 +56,11 @@ public class Carte implements Comparable<Carte> {
         int valeurActuelle = this.getValeur();
         int valeurAutreCarte = autreCarte.getValeur();
 
-        // Si les valeurs sont différentes, comparez simplement les valeurs
+        // Si les valeurs sont différentes, cela compare simplement les valeurs
         if (valeurActuelle != valeurAutreCarte) {
             return Integer.compare(valeurActuelle, valeurAutreCarte);
         } else {
-            // Si les valeurs sont égales, comparez les couleurs
+            // Si les valeurs sont égales, cela compare les couleurs
             return this.getCouleur().compareTo(autreCarte.getCouleur());
         }
     }
@@ -69,21 +69,19 @@ public class Carte implements Comparable<Carte> {
         int valeurActuelle = this.getValeur();
         int valeurAutreCarte = autreCarte.getValeur();
 
-        // Règles générales : la valeur de la carte actuelle doit être égale à la valeur
-        // de l'autre carte + 1
+        // Règles générales : la valeur de la carte actuelle doit être égale à la valeur de l'autre carte + 1
         if (valeurActuelle == valeurAutreCarte + 1) {
-            // Vérifier si les cartes ont la même couleur
+            // Vérifie si les cartes ont la même couleur
             return this.getCouleur().equals(autreCarte.getCouleur());
         }
 
-        // Si aucune des conditions ci-dessus n'est satisfaite, la carte n'est pas juste
-        // après
+        // Si aucune des conditions ci-dessus n'est satisfaite, la carte n'est pas juste après
         return false;
     }
 
     public String assignIcone() {
         if ("Joker".equals(couleur)) {
-            return "🃏"; // Utilisez l'icône que vous préférez pour représenter le Joker
+            return "🃏"; //Représente le Joker
         }
         switch (couleur) {
             case "Coeur":
@@ -101,7 +99,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🂻";
                     case "Q" -> "🂽";
                     case "K" -> "🂾";
-                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
+                    case "11" -> "🂻"; 
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Pique":
@@ -119,7 +117,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🂫";
                     case "Q" -> "🂭";
                     case "K" -> "🂮";
-                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
+                    case "11" -> "🂫"; 
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Carreau":
@@ -137,7 +135,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🃋";
                     case "Q" -> "🃍";
                     case "K" -> "🃎";
-                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
+                    case "11" -> "🃋"; 
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Trèfle":
@@ -155,7 +153,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🃛";
                     case "Q" -> "🃝";
                     case "K" -> "🃞";
-                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
+                    case "11" -> "🃛"; 
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             default:

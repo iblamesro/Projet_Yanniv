@@ -38,9 +38,10 @@ public abstract class Joueur {
     public void piocherCarte(PaquetCartes paquet) {
         Carte cartePiochee = paquet.piocherCarte();
         main.add(cartePiochee);
-        System.out.print(cartePiochee + " "); // affichage carte main du joueur
+        System.out.print(cartePiochee + " "); //Affichage des carte dans la main du joueur
     }
 
+    //Méthode qui permet lors de la paire 8 de sauter le tour du prochain joueur 
     public void jouerTour(PaquetCartes paquet, Joueur prochainJoueur) {
         if (this.doitSauterSonTour) {
             this.doitSauterSonTour = false;
@@ -55,35 +56,25 @@ public abstract class Joueur {
 
     public abstract boolean demanderYaniv();
 
-    // Autres méthodes...
-
-    // ... autres méthodes communes à tous les joueurs ...
-
-    // Méthode abstraite pour la déclaration de Yaniv ou Assaf
     public abstract void declarerYanivOuAssaf(Joueur joueurGagnant);
 
     public int calculerTotalPoints() {
         int totalPoints = 0;
         int nombreJokers = 0;
-
         for (Carte carte : main) {
             totalPoints += attribuerPointsSelonValeur(carte, totalPoints);
-
             // Compter le nombre de Jokers dans la main
             if (carte.getValeur() == 14) {
                 nombreJokers++;
             }
         }
-
-        // Appliquer la règle spécifique au Joker
+        // Applique la règle spécifique au Joker
         totalPoints = ajusterPointsJoker(totalPoints, nombreJokers);
-
         return totalPoints;
     }
 
     private int attribuerPointsSelonValeur(Carte carte, int totalPoints) {
         int valeurCarte = carte.getValeur();
-
         switch (valeurCarte) {
             case 1:
                 return 1; // As : 1 point
@@ -118,12 +109,10 @@ public abstract class Joueur {
     }
 
     public boolean aGagne() {
-        // Définir le seuil de points pour la victoire
+        // Défini le seuil de points pour la victoire
         int seuilVictoire = 7;
-
         // Évalue la valeur de la main du joueur
         int totalPoints = calculerTotalPoints();
-
         // Retourne true si le joueur a atteint ou dépassé le seuil de points
         return totalPoints <= seuilVictoire;
 
@@ -134,13 +123,9 @@ public abstract class Joueur {
 
     protected int getPoints() {
         int totalPoints = 0;
-
         for (Carte carte : main) {
-            // Supposez que chaque carte a une méthode getValeur() qui retourne sa valeur en
-            // points
             totalPoints += carte.getValeur();
         }
-
         return totalPoints;
     }
 
@@ -153,14 +138,13 @@ public abstract class Joueur {
     }
 
     public Carte choisirCarteAJeter() {
-        // Choisissez automatiquement la première carte de la main à jeter
+        // Choisi automatiquement la première carte de la main à jeter
         return main.get(0);
     }
 
     public void jeterCarte(PaquetCartes paquet, Carte carte, boolean dansDefausse) {
-        // Enlevez la carte de la main du joueur
+        // Enleve la carte de la main du joueur
         main.remove(carte);
-
         // Ajoutez la carte à la défausse si nécessaire
         if (dansDefausse) {
             paquet.ajouterDefausse(carte);
@@ -168,33 +152,27 @@ public abstract class Joueur {
     }
 
     public boolean piocherCarteApresJeter(PaquetCartes paquet) {
-        // Utilisez la méthode piocherCarteApresJeter du paquet
+        // Utilise la méthode piocherCarteApresJeter du paquet
         boolean prendreDansDefausse = paquet.piocherCarteApresJeter();
         return prendreDansDefausse;
     }
 
     public List<Carte> trouverMeilleureCombinaison() {
-        // Exemple : vérifier d'abord si le joueur a une suite
+        // Vérifier si le joueur a une suite
         if (CombinaisonsDeCartes.estSuite(main)) {
             // Retourner la suite trouvée
             return main;
         }
-
-        // Ajoutez des vérifications pour d'autres combinaisons si nécessaire
-
-        // Si aucune combinaison n'est trouvée
+        // Si aucune autre combinaison n'est trouvée
         return null;
     }
 
     public void jeterCombinaison(PaquetCartes paquet, List<Carte> combinaison) {
-        // Assurez-vous que les cartes de la combinaison sont présentes dans la main du
-        // joueur
+        // S'assure que les cartes de la combinaison sont présentes dans la main du joueur
         if (main.containsAll(combinaison)) {
-            // Retirez les cartes de la combinaison de la main du joueur
+            // Retire les cartes de la combinaison de la main du joueur
             main.removeAll(combinaison);
-
-            // Ajoutez ces cartes au paquet (ou à la défausse, selon la logique de votre
-            // jeu)
+            // Ajoute ces cartes au paquet 
             paquet.ajouterCartes(combinaison);
             if (CombinaisonsDeCartes.estSuite(combinaison)) {
                 System.out.println("A jeté une suite : " + combinaison);
@@ -205,7 +183,7 @@ public abstract class Joueur {
             System.out.println("Erreur : la combinaison n'est pas valide pour le joueur " + getNom());
         }
     }
-
+//on a setTourSauté() dans la classe BotStrategique quand doitSauterSonTour est true
     public void setTourSauté() {
         this.doitSauterSonTour = true;
     }

@@ -22,7 +22,7 @@ public class PaquetCartes {
                 cartes.add(new Carte(valeur, couleur));
             }
         }
-        // Ajouter les Jokers au paquet
+        // Ajoute les Jokers au paquet
         cartes.add(new Carte("Joker", "Joker"));
         cartes.add(new Carte("Joker", "Joker"));
     }
@@ -31,14 +31,13 @@ public class PaquetCartes {
         if (!cartes.isEmpty()) {
             return cartes.remove(0);
         } else {
-            // Gérer le cas où le paquet est vide, par exemple en mélangeant la défausse
+            // Permet de gérer le cas où le paquet est vide, par exemple en mélangeant la défausse
             melangerDefausse();
-            // Reprendre la première carte de la défausse ou générer une nouvelle carte
-            // selon votre logique
+            // Reprend la première carte de la défausse ou genere une nouvelle carte
             if (!cartes.isEmpty()) {
                 return cartes.remove(0);
             } else {
-                // Gérer le cas où le paquet reste vide après mélange
+                // Gére le cas où le paquet reste vide après mélange
                 System.out.println("Le paquet est toujours vide après mélange.");
                 return genererCarteAleatoire(); // Génère une nouvelle carte
             }
@@ -56,7 +55,7 @@ public class PaquetCartes {
     public Carte genererCarteAleatoire() {
         Random random = new Random();
         int valeur = random.nextInt(13) + 1; // Valeur entre 1 et 13 inclus
-        String couleur = "Coeur"; // Remplacez cela par une logique appropriée
+        String couleur = "Coeur";
         return new Carte(Integer.toString(valeur), couleur);
     }
 
@@ -77,13 +76,12 @@ public class PaquetCartes {
         if (!cartes.isEmpty()) {
             return cartes.remove(0);
         } else if (!defausse.isEmpty()) {
-            // Si le paquet est vide, mais la défausse a des cartes, remettre la défausse
-            // dans le paquet
+            // Si le paquet est vide, mais la défausse a des cartes, remettre la défausse dans le paquet
             melangerDefausse();
-            // Retirer et renvoyer la première carte du paquet
+            // Retire et renvoie la première carte du paquet
             return cartes.remove(0);
         } else {
-            // Si à la fois le paquet et la défausse sont vides, retourner null
+            // Si à la fois le paquet et la défausse sont vides, retourne null
             return null;
         }
     }
@@ -97,7 +95,7 @@ public class PaquetCartes {
     }
 
     public int getNombreCartes() {
-        // Retournez le nombre de cartes dans le paquet
+        // Retourne le nombre de cartes dans le paquet
         return cartes.size();
     }
 
@@ -122,8 +120,7 @@ public class PaquetCartes {
             Carte cartePiochee = defausse.remove(defausse.size() - 1);
             return cartePiochee;
         } else {
-            // Gérer le cas où la défausse est vide (vous pouvez ajouter une logique
-            // supplémentaire ici)
+            // Gere le cas où la défausse est vide
             System.out.println("La défausse est vide. Pioche dans la pioche à la place.");
             return piocherCarte();
         }
@@ -143,7 +140,6 @@ public class PaquetCartes {
         return defausse;
     }
 
-    // Getter pour la taille de la défausse
     public int getTailleDefausse() {
         return defausse.size();
     }

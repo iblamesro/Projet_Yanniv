@@ -6,9 +6,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+// BotPasStrategique étend la classe abstraite Joueur 
 public class BotPasStrategique extends Joueur {
 
-    private int points;  // Ajout du champ points
+    private int points;
     private int sensJeu = SensJeu.HORAIRE;
     private List<Joueur> joueurs;
 
@@ -21,46 +22,33 @@ public class BotPasStrategique extends Joueur {
     @Override
     public boolean demanderYaniv() {
         return false;
-        // Implémentez la logique pour décider si le bot stratégique veut déclarer Assaf
-        // Retournez true s'il veut déclarer Assaf, sinon false
+       //Logique pour décider si le bot pas stratégique veut déclarer Yanniv, il ne déclare pas Yanniv
     }
 
     @Override
     public boolean demanderAssaf() {
-        // Ajoutez des messages de débogage
         System.out.println("Le bot non stratégique envisage de déclarer Assaf.");
-
-        // Votre logique de décision ici
-
-        // Ajoutez un message pour indiquer si Assaf est déclaré
         boolean declarerAssaf = true;
         System.out.println("Le bot non stratégique décide de déclarer Assaf : " + declarerAssaf);
-
         return declarerAssaf;
-        // Implémentez la logique pour décider si le bot non stratégique veut déclarer
-        // Assaf
-        // Retournez true s'il veut déclarer Assaf, sinon false
+        //Logique pour décider si le bot stratégique veut déclarer Assaf , il déclare Assaf
     }
 
     @Override
     public void jouer(PaquetCartes paquet, Joueur prochainJoueur) {
         System.out.println("Tour de " + getNom());
         piocherCarte(paquet);
-
-        // Logique pour choisir une carte à jouer (à implémenter)
+        // Logique pour choisir une carte à jouer 
         Carte carteAJouer = choisirCarteAJouer(prochainJoueur);
-
-        // Vérifiez si la carte choisie est valide
+        // Vérifie si la carte choisie est valide
         if (estCarteValide(carteAJouer, prochainJoueur)) {
-            // Retirez la carte de la main du joueur et ajoutez-la à la pile de défausse
+            // Retire la carte de la main du joueur et ajoutez-la à la pile de défausse
             main.remove(carteAJouer);
             paquet.ajouterALaDefausse(carteAJouer);
-
-            // Affichez la carte jouée
             System.out.println(getNom() + " joue : " + carteAJouer);
 
         } else {
-            // Si la carte choisie n'est pas valide, défaussez une carte au hasard
+            // Si la carte choisie n'est pas valide, défausse une carte au hasard
             System.out.println("Carte invalide. " + getNom() + " défausse une carte au hasard.");
             if (prochainJoueur instanceof BotStrategique) {
                 defausserCarteAuHasard(paquet, (BotStrategique) prochainJoueur, 3);
@@ -79,15 +67,14 @@ public class BotPasStrategique extends Joueur {
     }
 
     public Carte choisirCarteAJouer(Joueur prochainJoueur) {
-        // Triez la main du joueur par valeur
+        // Trie la main du joueur par valeur
         Collections.sort(main);
 
-        // Choisissez la première carte de la main
+        // Choisi la première carte de la main
         if (!main.isEmpty()) {
             return main.get(0);
         } else {
-            // Gérer le cas où la main est vide, par exemple, piocher une nouvelle carte ou
-            // retourner null
+            // Permet de gerer le cas où la main est vide, par exemple, piocher une nouvelle carte ou retourner null
             return null;
         }
     }
@@ -103,7 +90,6 @@ public class BotPasStrategique extends Joueur {
                 paquet.ajouterALaDefausse(carteChoisie);
                 System.out.println(getNom() + " défausse une carte au hasard : " + carteChoisie);
             } else {
-                // Réduisez le nombre d'essais restants et réessayez
                 defausserCarteAuHasard(paquet, prochainJoueur, essaisRestants - 1);
             }
         }
@@ -116,7 +102,7 @@ public class BotPasStrategique extends Joueur {
     @Override
     public void declarerYanivOuAssaf(Joueur joueurGagnant) {
         System.out.println("Le joueur " + getNom() + " déclare Yaniv !");
-        // Le bot non stratégique déclare toujours Yaniv, même s'il a plus de 7 points
+        // Le bot non stratégique à la possibiloite de déclarer Yaniv, même s'il a plus de 7 points ce qui le fera perdre plus souvent
         if (getPoints() < 7) {
             System.out.println(getNom() + " a gagné !");
         }
@@ -124,35 +110,27 @@ public class BotPasStrategique extends Joueur {
 
     protected int getPoints() {
         int totalPoints = 0;
-
         for (Carte carte : main) {
-            // Supposez que chaque carte a une méthode getValeur() qui retourne sa valeur en
-            // points
             totalPoints += carte.getValeur();
         }
-
         return totalPoints;
     }
 
     @Override
     public Carte choisirCarteAJeter() {
-        // Triez la main en ordre croissant de points
+        // Trie la main en ordre croissant de points
         main.sort(Comparator.comparingInt(Carte::getValeur));
-
-        // Choisissez la carte avec le moins de points
+        // Choisi  la carte avec le moins de points , ce qui le fera perdre plus vite 
         Carte carteAJeter = main.get(0);
-
         System.out.print("Carte jetée : " + carteAJeter);
         return carteAJeter;
     }
 
     @Override
     public boolean piocherCarteApresJeter(PaquetCartes paquet) {
-        // Le BotPasStrategique choisit aléatoirement entre piocher dans la pioche ou
-        // dans la défausse
+        // Le BotPasStrategique choisit aléatoirement entre piocher dans la pioche ou dans la défausse
         Random random = new Random();
         boolean prendreDansDefausse = random.nextBoolean();
-
         if (prendreDansDefausse) {
             // Le bot choisit de piocher dans la défausse
             Carte cartePiochee = paquet.piocherDefausse();
@@ -164,15 +142,12 @@ public class BotPasStrategique extends Joueur {
             main.add(cartePiochee);
             System.out.println("Carte piochée dans la pioche : " + cartePiochee);
         }
-
         return prendreDansDefausse;
     }
 
     public void setMain(List<Carte> mainNonVide) {
         this.main = new ArrayList<>(mainNonVide);
     }
-
-    
 
     public void setPoints(int i) {
         this.points = points;
