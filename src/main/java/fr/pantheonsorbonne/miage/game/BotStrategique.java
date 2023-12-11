@@ -1,5 +1,6 @@
 package fr.pantheonsorbonne.miage.game;
 
+import java.util.ArrayList;
 // Implémentation du BotStrategique
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +11,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BotStrategique extends Joueur {
+
+    private int points;  // Ajout du champ points
     private static List<Joueur> joueurs;
     private int sensJeu = SensJeu.HORAIRE;
 
@@ -20,7 +23,8 @@ public class BotStrategique extends Joueur {
     Joueur botProchainJoueur;
     BotStrategique prochainJoueur;
 
-    public void setJoueurs(List<Joueur> joueurs) {
+    public BotStrategique(String nom, List<Joueur> joueurs) {
+        super(nom, true);
         this.joueurs = joueurs;
     }
 
@@ -67,7 +71,7 @@ public class BotStrategique extends Joueur {
         }
     }
 
-    private void defausserCarteAuHasard(PaquetCartes paquet, BotStrategique prochainJoueur) {
+    public void defausserCarteAuHasard(PaquetCartes paquet, BotStrategique prochainJoueur) {
         // Logique pour défausser une carte au hasard
         if (!main.isEmpty()) {
             // Choisissez une carte au hasard
@@ -128,7 +132,7 @@ public class BotStrategique extends Joueur {
         joueurSuivant.piocherCarte(paquet);
     }
 
-    private boolean estCarteValide(Carte carteAJouer, Joueur prochainJoueur) {
+    public boolean estCarteValide(Carte carteAJouer, Joueur prochainJoueur) {
         // Vérifiez d'abord si prochainJoueur est une instance de BotStrategique
         if (prochainJoueur instanceof BotStrategique) {
             // Convertissez prochainJoueur en BotStrategique
@@ -184,7 +188,7 @@ public class BotStrategique extends Joueur {
     // Autres méthodes nécessaires pour la logique du bot stratégique (à
     // implémenter)
 
-    private Carte choisirCarteAJouer(Joueur prochainJoueur) {
+    public Carte choisirCarteAJouer(Joueur prochainJoueur) {
         // Vérifiez d'abord si prochainJoueur est une instance de BotStrategique
         if (prochainJoueur instanceof BotStrategique) {
             // Triez la main du BotStrategique par valeur (ou selon une stratégie
@@ -347,4 +351,21 @@ public class BotStrategique extends Joueur {
         return prendreDansDefausse;
     }
 
+    public void setMain(List<Carte> mainNonVide) {
+        this.main = new ArrayList<>(mainNonVide);
+    }
+
+    
+
+    public void setPoints(int i) {
+        this.points = points;
+    }
+
+    public List<Carte> getMain() {
+        return main;
+    }
+
+    public void setJoueurs(List<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
 }

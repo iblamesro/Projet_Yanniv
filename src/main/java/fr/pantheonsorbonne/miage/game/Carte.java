@@ -101,6 +101,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🂻";
                     case "Q" -> "🂽";
                     case "K" -> "🂾";
+                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Pique":
@@ -118,6 +119,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🂫";
                     case "Q" -> "🂭";
                     case "K" -> "🂮";
+                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Carreau":
@@ -135,6 +137,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🃋";
                     case "Q" -> "🃍";
                     case "K" -> "🃎";
+                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             case "Trèfle":
@@ -152,6 +155,7 @@ public class Carte implements Comparable<Carte> {
                     case "J" -> "🃛";
                     case "Q" -> "🃝";
                     case "K" -> "🃞";
+                    case "11" -> "🂿"; // Ajoutez la correspondance pour la valeur "11"
                     default -> throw new IllegalArgumentException("Valeur de carte non reconnue : " + valeur);
                 };
             default:

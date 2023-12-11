@@ -53,7 +53,7 @@ public class PaquetCartes {
         defausse.clear(); // Efface la défausse car les cartes ont été ajoutées au paquet
     }
 
-    private Carte genererCarteAleatoire() {
+    public Carte genererCarteAleatoire() {
         Random random = new Random();
         int valeur = random.nextInt(13) + 1; // Valeur entre 1 et 13 inclus
         String couleur = "Coeur"; // Remplacez cela par une logique appropriée
@@ -139,4 +139,21 @@ public class PaquetCartes {
         }
     }
 
+    public List<Carte> getDefausse() {
+        return defausse;
+    }
+
+    // Getter pour la taille de la défausse
+    public int getTailleDefausse() {
+        return defausse.size();
+    }
+
+    public void ajouterALaPioche(Carte carte) {
+    }
+
+    public List<Carte> getPioche() {
+        return null;
+    }
+
+    
 }

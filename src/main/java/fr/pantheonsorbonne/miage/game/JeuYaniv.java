@@ -200,6 +200,27 @@ public class JeuYaniv {
         jeu.finirManche();
 
     }
+
+    public int getSensJeu() {
+        return this.sensJeu;
+    }
+
+    public void setSensJeu(int sens) {
+        sensJeu = sens;
+    }
+
+    public void changerSensJeu() {
+        System.out.println("Le sens du jeu a changé !");
+        int sensActuel = getSensJeu();
+
+        if (sensActuel == SensJeu.HORAIRE) {
+            setSensJeu(SensJeu.ANTIHORAIRE);
+            System.out.println("Le sens du jeu est maintenant anti-horaire.");
+        } else {
+            setSensJeu(SensJeu.HORAIRE);
+            System.out.println("Le sens du jeu est maintenant horaire.");
+        }
+    }
 }
 
 // Classe Joueur et les autres classes restent inchangées

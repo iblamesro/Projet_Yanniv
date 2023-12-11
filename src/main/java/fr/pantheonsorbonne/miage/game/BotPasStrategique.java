@@ -1,15 +1,24 @@
 package fr.pantheonsorbonne.miage.game;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
-class BotPasStrategique extends Joueur {
+public class BotPasStrategique extends Joueur {
 
+    private int points;  // Ajout du champ points
     private int sensJeu = SensJeu.HORAIRE;
+    private List<Joueur> joueurs;
 
     public BotPasStrategique(String nom) {
         super(nom, true);
+    }
+
+    public BotPasStrategique(String nom, List<Joueur> joueurs) {
+        super(nom, true);
+        this.joueurs = joueurs;
     }
 
     @Override
@@ -72,7 +81,7 @@ class BotPasStrategique extends Joueur {
         sensJeu = sens;
     }
 
-    private Carte choisirCarteAJouer(Joueur prochainJoueur) {
+    public Carte choisirCarteAJouer(Joueur prochainJoueur) {
         // Triez la main du joueur par valeur
         Collections.sort(main);
 
@@ -86,7 +95,7 @@ class BotPasStrategique extends Joueur {
         }
     }
 
-    private void defausserCarteAuHasard(PaquetCartes paquet, Joueur prochainJoueur, int essaisRestants) {
+    public void defausserCarteAuHasard(PaquetCartes paquet, Joueur prochainJoueur, int essaisRestants) {
         if (essaisRestants > 0 && !main.isEmpty()) {
             Random random = new Random();
             int indexCarte = random.nextInt(main.size());
@@ -103,7 +112,7 @@ class BotPasStrategique extends Joueur {
         }
     }
 
-    private boolean estCarteValide(Carte carteChoisie, Joueur prochainJoueur) {
+    public boolean estCarteValide(Carte carteChoisie, Joueur prochainJoueur) {
         return false;
     }
 
@@ -162,4 +171,21 @@ class BotPasStrategique extends Joueur {
         return prendreDansDefausse;
     }
 
+    public void setMain(List<Carte> mainNonVide) {
+        this.main = new ArrayList<>(mainNonVide);
+    }
+
+    
+
+    public void setPoints(int i) {
+        this.points = points;
+    }
+
+    public List<Carte> getMain() {
+        return main;
+    }
+
+    public void setJoueurs(List<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
 }

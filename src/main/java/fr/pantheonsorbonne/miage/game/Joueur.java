@@ -6,7 +6,7 @@ import java.util.List;
 // Classe abstraite Joueur
 public abstract class Joueur {
     protected String nom;
-    protected ArrayList<Carte> main;
+    public ArrayList<Carte> main;
     protected int score;
     public boolean doitSauterSonTour = false;
 
@@ -109,7 +109,7 @@ public abstract class Joueur {
         }
     }
 
-    private int ajusterPointsJoker(int totalPoints, int nombreJokers) {
+    public int ajusterPointsJoker(int totalPoints, int nombreJokers) {
         // Si le nombre de Jokers est supérieur à 1, ajuster le total des points
         if (nombreJokers > 1) {
             totalPoints += (nombreJokers - 1) * 5; // Chaque Joker supplémentaire après le premier ajoute 5 points
@@ -148,7 +148,7 @@ public abstract class Joueur {
         return main.size();
     }
 
-    public List<Joueur> getMain() {
+    public List<Carte> getMain() {
         return null;
     }
 
