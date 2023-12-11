@@ -1,4 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,63 +36,72 @@ public class JeuYaniv {
 
     }
 
-    public void jeterCartesAvantPartie() {
+    private void distribuerCartes() {
+        // Mélanger et redistribuer si le paquet n'a pas suffisamment de cartes
+        if (paquet.getNombreCartes() < joueurs.size() * 7) {
+            paquet.melanger();
+        }
+
         for (Joueur joueur : joueurs) {
-            System.out.println("Tour de " + joueur.getNom() + " pour jeter une carte avant la partie.");
+            System.out.println();
+            joueur.afficherNom();
+            for (int i = 0; i < 7; i++) {
+                if (paquet.getNombreCartes() > 0) {
+                    joueur.piocherCarte(paquet);
+                } else {
+                    // Gérer le cas où le paquet est vide (vous pouvez ajouter une logique
+                    // supplémentaire ici)
+                    System.out.println("Le paquet est vide. Mélange et redistribue.");
+                    paquet.melanger();
+                    joueur.piocherCarte(paquet);
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private List<Carte> creerPioche() {
+        // Créer une pioche avec les cartes restantes du paquet initial
+        return paquet.creerPioche();
+    }
+
+    public void jeterEtPiocherCarte(Joueur joueur) {
+        if (joueur.doitSauterSonTour) {
+            System.out.println("Le " + joueur.getNom() + " doit sauter son tour...");
+            joueur.doitSauterSonTour = false;
+        } else {
+            System.out.println();
+            System.out.println(joueur.getNom());
 
             // Vérifiez les combinaisons et choisissez la carte à jeter en conséquence
             List<Carte> combinaison = joueur.trouverMeilleureCombinaison();
 
             if (combinaison != null && !combinaison.isEmpty()) {
-                System.out.println(joueur.getNom() + " a trouvé une combinaison : " + combinaison);
+                System.out.println("Combinaison trouvée  " + combinaison);
                 joueur.jeterCombinaison(paquet, combinaison);
             } else {
                 // Si aucune combinaison n'est trouvée, choisissez une carte à jeter normalement
                 Carte carteAJeter = joueur.choisirCarteAJeter();
                 joueur.jeterCarte(paquet, carteAJeter, true);
-            }
-        }
-    }
 
-    public void piocherCarteApresJeter() {
-        for (Joueur joueur : joueurs) {
-            System.out.println("Tour de " + joueur.getNom() + " pour piocher une carte.");
-            boolean prendreDansDefausse = joueur.piocherCarteApresJeter(paquet); // Ajouter l'argument paquet ici
-            System.out.println(joueur.getNom() + " a choisi de piocher dans "
-                    + (prendreDansDefausse ? "la défausse." : "la pioche."));
+            }
+            System.out.println();
+
+            joueur.piocherCarteApresJeter(paquet);
         }
+        System.out.println();
+
     }
 
     public void jeterEtPiocher() {
         do {
-            jeterCartesAvantPartie();
-            piocherCarteApresJeter();
-            joueurCourant = obtenirProchainJoueur(joueurCourant, joueurs, SensJeu.HORAIRE); // Mettreclea à jour le
-                                                                                            // joueur
-                                                                                            // courant
+            joueurCourant = obtenirProchainJoueur(joueurCourant, joueurs, SensJeu.HORAIRE);
+            jeterEtPiocherCarte(joueurCourant);
+            // Mettreclea à jour le
+            // joueur
+            // courant
         } while (joueurCourant.calculerTotalPoints() >= 7);
-    }
-    public void jouerPartie() {
-
-        boolean declarerYanivOuAssaf = true;
-
-        while (!declarerYanivOuAssaf) {
-            for (Joueur joueur : joueurs) {
-                System.out.println("Tour de " + joueur.getNom());
-
-                // Utilisez l'instance de SensJeu.HORAIRE au lieu de la valeur HORAIRE
-                joueur.jouerTour(paquet, obtenirProchainJoueur(joueur, joueurs, SensJeu.HORAIRE));
-
-                if (joueur.aGagne()) {
-                    declarerYanivOuAssaf = false;
-                    System.out.println(joueur.getNom() + " a gagné !");
-                    break;
-                }
-            }
-        }
-
-        // Fin de la partie, évaluation des mains et attribution des points
-        finirManche();
     }
 
     private Joueur obtenirProchainJoueur(Joueur joueurCourant, List<Joueur> joueurs, int sensJeu) {
@@ -107,10 +117,6 @@ public class JeuYaniv {
         }
 
         return null;
-    }
-
-    private void terminerTour() {
-        joueurCourant = obtenirProchainJoueur(joueurCourant, joueurs, SensJeu.HORAIRE);
     }
 
     private void finirManche() {
@@ -174,40 +180,11 @@ public class JeuYaniv {
         System.exit(0); // Ceci est optionnel, cela ferme l'application
     }
 
-    private List<Carte> creerPioche() {
-        // Créer une pioche avec les cartes restantes du paquet initial
-        return paquet.creerPioche();
-    }
-
-    private void distribuerCartes() {
-        // Mélanger et redistribuer si le paquet n'a pas suffisamment de cartes
-        if (paquet.getNombreCartes() < joueurs.size() * 7) {
-            paquet.melanger();
-        }
-
-        for (Joueur joueur : joueurs) {
-            for (int i = 0; i < 7; i++) {
-                if (paquet.getNombreCartes() > 0) {
-                    joueur.piocherCarte(paquet);
-                } else {
-                    // Gérer le cas où le paquet est vide (vous pouvez ajouter une logique
-                    // supplémentaire ici)
-                    System.out.println("Le paquet est vide. Mélange et redistribue.");
-                    paquet.melanger();
-                    joueur.piocherCarte(paquet);
-                }
-            }
-        }
-    }
-
     public static void main(String[] args) {
         JeuYaniv jeu = new JeuYaniv(2);
 
-        
         // Jeter les cartes avant le début de la partie
         jeu.jeterEtPiocher();
-
-      
 
         // Créer une pioche avec les cartes restantes
         List<Carte> cartesRestantes = jeu.creerPioche();
@@ -220,8 +197,7 @@ public class JeuYaniv {
 
         // Afficher le nombre de cartes dans la pioche
         System.out.println("Nombre de cartes dans la pioche : " + cartesRestantes.size());
-
-        jeu.jouerPartie();
+        jeu.finirManche();
 
     }
 }

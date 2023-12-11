@@ -1,10 +1,17 @@
 package fr.pantheonsorbonne.miage.game;
+
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 class BotPasStrategique extends Joueur {
+
+    private int sensJeu = SensJeu.HORAIRE;
+
+    public BotPasStrategique(String nom) {
+        super(nom, true);
+    }
+
     @Override
     public boolean demanderYaniv() {
         return false;
@@ -29,15 +36,8 @@ class BotPasStrategique extends Joueur {
         // Retournez true s'il veut déclarer Assaf, sinon false
     }
 
-    private static List<Joueur> joueurs; // Assurez-vous que cette liste est correctement initialisée
-    private int sensJeu = SensJeu.HORAIRE;
-
-    public BotPasStrategique(String nom) {
-        super(nom, true);
-    }
-
     @Override
-    public void jouerTour(PaquetCartes paquet, Joueur prochainJoueur) {
+    public void jouer(PaquetCartes paquet, Joueur prochainJoueur) {
         System.out.println("Tour de " + getNom());
         piocherCarte(paquet);
 
@@ -53,8 +53,6 @@ class BotPasStrategique extends Joueur {
             // Affichez la carte jouée
             System.out.println(getNom() + " joue : " + carteAJouer);
 
-            // Appliquez les règles spécifiques du jeu Yaniv ici
-            appliquerReglesYaniv(carteAJouer, prochainJoueur);
         } else {
             // Si la carte choisie n'est pas valide, défaussez une carte au hasard
             System.out.println("Carte invalide. " + getNom() + " défausse une carte au hasard.");
@@ -66,128 +64,12 @@ class BotPasStrategique extends Joueur {
         }
     }
 
-    private void appliquerReglesYaniv(Carte carteAJouer, Joueur prochainJoueur) {
-        // Gestion du double 7-7
-        if (carteAJouer.getValeur() == 7 && carteAJouer.estJusteApres(carteAJouer)) {
-            // Changer de sens : À implémenter
-            changerSensJeu();
-        }
-
-        // Gestion du double 8-8
-        if (carteAJouer.getValeur() == 8 && carteAJouer.estJusteApres(carteAJouer)) {
-            // Sauter le tour du prochain joueur : À implémenter
-            sauterTourProchainJoueur();
-        }
-
-        // Gestion du double 9-9
-        if (carteAJouer.getValeur() == 9 && carteAJouer.estJusteApres(carteAJouer)) {
-            // Forcer le prochain joueur à piocher une carte de la pioche : À implémenter
-            forcerPiocheProchainJoueur(null, prochainJoueur);
-        }
-
-        // Gestion du double 10-10
-        if (carteAJouer.getValeur() == 10 && carteAJouer.estJusteApres(carteAJouer)) {
-            // Piocher au hasard une carte chez le prochain joueur
-            // et éventuellement l'échanger avec l'une de ses cartes : À implémenter
-            piocherEchangerProchainJoueur(prochainJoueur);
-        }
-
-        // Gestion de la suite 10-J-Q
-        if (carteAJouer.getValeur() == 10 && carteAJouer.estJusteApres(carteAJouer)) {
-            // Le prochain joueur est obligé de mettre une carte qui continue la suite
-            // (un K de la même couleur) sinon pioche une carte : À implémenter
-            gererSuite10JQ(prochainJoueur, null);
-        }
-
-        // Ajoutez d'autres règles spécifiques ici en fonction de vos besoins
-    }
-
-    private void changerSensJeu() {
-        System.out.println("Le sens du jeu a changé !");
-        int sensActuel = getSensJeu();
-
-        if (sensActuel == SensJeu.HORAIRE) {
-            setSensJeu(SensJeu.ANTIHORAIRE);
-            System.out.println("Le sens du jeu est maintenant anti-horaire.");
-        } else {
-            setSensJeu(SensJeu.HORAIRE);
-            System.out.println("Le sens du jeu est maintenant horaire.");
-        }
-    }
-
-    private Joueur obtenirProchainJoueur() {
-        int indexJoueurCourant = joueurs.indexOf(this); // Assurez-vous que "this" se réfère à l'instance actuelle de
-                                                        // Joueur
-
-        if (indexJoueurCourant != -1) {
-            // Calculer l'index du prochain joueur en fonction du sens du jeu
-            int indexProchainJoueur = (sensJeu == SensJeu.ANTIHORAIRE)
-                    ? (indexJoueurCourant + 1) % joueurs.size()
-                    : (indexJoueurCourant - 1 + joueurs.size()) % joueurs.size();
-
-            return joueurs.get(indexProchainJoueur);
-        }
-
-        return null;
-    }
-
     public int getSensJeu() {
         return sensJeu;
     }
 
     public void setSensJeu(int sens) {
         sensJeu = sens;
-    }
-
-    private void sauterTourProchainJoueur() {
-        Joueur prochainJoueur = obtenirProchainJoueur();
-
-        if (prochainJoueur != null) {
-            System.out.println("Le prochain joueur, " + prochainJoueur.getNom() + ", a son tour sauté !");
-            prochainJoueur.sauterTour();
-        } else {
-            System.out.println("Erreur : Impossible de sauter le tour du prochain joueur.");
-        }
-    }
-
-    private void forcerPiocheProchainJoueur(PaquetCartes paquet, Joueur prochainJoueur) {
-        Carte cartePiochee = paquet.piocherCarte();
-        prochainJoueur.main.add(cartePiochee);
-        System.out.println(prochainJoueur.getNom() + " doit piocher une carte !");
-    }
-
-    private void piocherEchangerProchainJoueur(Joueur prochainJoueur) {
-        // Piocher au hasard une carte chez le prochain joueur
-        Collections.shuffle(prochainJoueur.main);
-        Carte cartePiochee = prochainJoueur.main.get(0);
-
-        // Éventuellement l'échanger avec l'une de ses cartes
-        if (!main.isEmpty()) {
-            Collections.shuffle(main);
-            Carte carteEchangee = main.get(0);
-
-            // Afficher les cartes échangées
-            System.out.println(getNom() + " pioche et échange avec " + prochainJoueur.getNom() +
-                    ": " + cartePiochee + " vs " + carteEchangee);
-
-            // Effectuer l'échange
-            prochainJoueur.main.remove(cartePiochee);
-            main.remove(carteEchangee);
-            prochainJoueur.main.add(carteEchangee);
-            main.add(cartePiochee);
-        }
-    }
-
-    private void gererSuite10JQ(Joueur prochainJoueur, PaquetCartes paquet) {
-        // Logique pour gérer la suite 10-J-Q
-        Carte carteK = new Carte("K", "Pique"); // Supposons que le bot choisit le K de Pique
-
-        if (main.contains(carteK)) {
-            System.out.println(getNom() + " joue la suite 10-J-Q avec le K de Pique !");
-            main.remove(carteK);
-        } else {
-            forcerPiocheProchainJoueur(paquet, prochainJoueur);
-        }
     }
 
     private Carte choisirCarteAJouer(Joueur prochainJoueur) {
@@ -254,7 +136,7 @@ class BotPasStrategique extends Joueur {
         // Choisissez la carte avec le moins de points
         Carte carteAJeter = main.get(0);
 
-        System.out.println(getNom() + " a jeté la carte : " + carteAJeter);
+        System.out.print("Carte jetée : " + carteAJeter);
         return carteAJeter;
     }
 
@@ -265,20 +147,16 @@ class BotPasStrategique extends Joueur {
         Random random = new Random();
         boolean prendreDansDefausse = random.nextBoolean();
 
-        // Affichez un message indiquant d'où le joueur a pioché
-        System.out.println(
-                getNom() + " a choisi de piocher dans " + (prendreDansDefausse ? "la défausse." : "la pioche."));
-
         if (prendreDansDefausse) {
             // Le bot choisit de piocher dans la défausse
             Carte cartePiochee = paquet.piocherDefausse();
             main.add(cartePiochee);
-            System.out.println(getNom() + " a pioché dans la défausse : " + cartePiochee);
+            System.out.println("Carte piochée dans la défausse : " + cartePiochee);
         } else {
             // Le bot choisit de piocher dans la pioche
             Carte cartePiochee = paquet.piocherCarte();
             main.add(cartePiochee);
-            System.out.println(getNom() + " a pioché dans la pioche : " + cartePiochee);
+            System.out.println("Carte piochée dans la pioche : " + cartePiochee);
         }
 
         return prendreDansDefausse;

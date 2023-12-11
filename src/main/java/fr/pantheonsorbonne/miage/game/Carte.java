@@ -1,7 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
 
-import java.util.Random;
-
 public class Carte implements Comparable<Carte> {
     private String valeur;
     private String couleur;
@@ -14,12 +12,16 @@ public class Carte implements Comparable<Carte> {
         this.valeur = valeur;
         this.couleur = couleur;
         this.icone = assignIcone(); // Attribuer une icône lors de la création de la carte
-    
+
     }
 
     @Override
     public String toString() {
-        return "" + icone + " " + valeur + " de " + couleur;
+        if ("Joker".equals(couleur)) {
+            return "" + icone; // Afficher uniquement l'icône pour les Jokers
+        } else {
+            return "" + icone; // Afficher uniquement l'icône pour les cartes normales
+        }
     }
 
     public String getCouleur() {
@@ -79,7 +81,10 @@ public class Carte implements Comparable<Carte> {
         return false;
     }
 
-   private String assignIcone() {
+    public String assignIcone() {
+        if ("Joker".equals(couleur)) {
+            return "🃏"; // Utilisez l'icône que vous préférez pour représenter le Joker
+        }
         switch (couleur) {
             case "Coeur":
                 return switch (valeur) {

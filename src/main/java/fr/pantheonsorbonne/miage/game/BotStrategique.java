@@ -16,12 +16,14 @@ public class BotStrategique extends Joueur {
     public BotStrategique(String nom) {
         super(nom, true);
     }
+
     Joueur botProchainJoueur;
     BotStrategique prochainJoueur;
 
     public void setJoueurs(List<Joueur> joueurs) {
         this.joueurs = joueurs;
     }
+
     @Override
     public boolean demanderAssaf() {
         return false;
@@ -36,10 +38,8 @@ public class BotStrategique extends Joueur {
         // Retournez true s'il veut déclarer Assaf, sinon false
     }
 
-    
-
     @Override
-    public void jouerTour(PaquetCartes paquet, Joueur prochainJoueur) {
+    public void jouer(PaquetCartes paquet, Joueur prochainJoueur) {
         System.out.println("Tour de " + getNom());
         piocherCarte(paquet);
 
@@ -59,9 +59,6 @@ public class BotStrategique extends Joueur {
 
                 // Affichez la carte jouée
                 System.out.println(getNom() + " joue : " + carteAJouer);
-
-                // Appliquez les règles spécifiques du jeu Yaniv ici
-                appliquerReglesYaniv(carteAJouer, botProchainJoueur);
             } else {
                 // Si la carte choisie n'est pas valide, défaussez une carte au hasard
                 System.out.println("Carte invalide. " + getNom() + " défausse une carte au hasard.");
@@ -86,46 +83,6 @@ public class BotStrategique extends Joueur {
             } else {
                 // Si la carte choisie n'est pas valide, réessayez de défausser une autre carte
                 defausserCarteAuHasard(paquet, prochainJoueur);
-            }
-        }
-    }
-
-    private void appliquerReglesYaniv(Carte carteAJouer, Joueur prochainJoueur) {
-        // Vérifiez d'abord si prochainJoueur est une instance de BotStrategique
-        if (prochainJoueur instanceof BotStrategique) {
-            // Convertissez prochainJoueur en BotStrategique
-            BotStrategique botProchainJoueur = (BotStrategique) prochainJoueur;
-
-            // Gestion du double 7-7
-            if (carteAJouer.getValeur() == 7 && carteAJouer.estJusteApres(carteAJouer)) {
-                // Changer de sens
-                changerSensJeu();
-            }
-
-            // Gestion du double 8-8
-            if (carteAJouer.getValeur() == 8 && carteAJouer.estJusteApres(carteAJouer)) {
-                // Sauter le tour du prochain joueur
-                sauterTourJoueurSuivant();
-            }
-
-            // Gestion du double 9-9
-            if (carteAJouer.getValeur() == 9 && carteAJouer.estJusteApres(carteAJouer)) {
-                // Forcer le prochain joueur à piocher une carte de la pioche
-                forcerPiocheJoueurSuivant(null);
-            }
-
-            // Gestion du double 10-10
-            if (carteAJouer.getValeur() == 10 && carteAJouer.estJusteApres(carteAJouer)) {
-                // Piocher au hasard une carte chez le prochain joueur
-                // et éventuellement l'échanger avec l'une de ses cartes
-                piocherEchangerProchainJoueur(botProchainJoueur);
-            }
-
-            // Gestion de la suite 10-J-Q
-            if (carteAJouer.getValeur() == 10 && carteAJouer.estJusteApres(carteAJouer)) {
-                // Le prochain joueur est obligé de mettre une carte qui continue la suite
-                // (un K de la même couleur) sinon pioche une carte
-                gererSuite10JQ(botProchainJoueur, null);
             }
         }
     }
@@ -162,49 +119,13 @@ public class BotStrategique extends Joueur {
     private void sauterTourJoueurSuivant() {
         Joueur joueurSuivant = obtenirJoueurSuivant();
         System.out.println("Le tour de " + joueurSuivant.getNom() + " est sauté !");
-        joueurSuivant.setTourSauté(true);
+        joueurSuivant.setTourSauté();
     }
 
-
-   
     private void forcerPiocheJoueurSuivant(PaquetCartes paquet) {
         Joueur joueurSuivant = obtenirJoueurSuivant();
         System.out.println("Forcer " + joueurSuivant.getNom() + " à piocher une carte de la pioche.");
         joueurSuivant.piocherCarte(paquet);
-    }
-
-    private void piocherEchangerProchainJoueur(Joueur prochainJoueur) {
-        // Piocher au hasard une carte chez le prochain joueur
-        Collections.shuffle(prochainJoueur.main);
-        Carte cartePiochee = prochainJoueur.main.get(0);
-
-        // Éventuellement l'échanger avec l'une de ses cartes
-        if (!main.isEmpty()) {
-            Collections.shuffle(main);
-            Carte carteEchangee = main.get(0);
-
-            // Afficher les cartes échangées
-            System.out.println(getNom() + " pioche et échange avec " + prochainJoueur.getNom() +
-                    ": " + cartePiochee + " vs " + carteEchangee);
-
-            // Effectuer l'échange
-            prochainJoueur.main.remove(cartePiochee);
-            main.remove(carteEchangee);
-            prochainJoueur.main.add(carteEchangee);
-            main.add(cartePiochee);
-        }
-    }
-
-    private void gererSuite10JQ(Joueur prochainJoueur, PaquetCartes paquet) {
-        // Logique pour gérer la suite 10-J-Q
-        Carte carteK = new Carte("K", "Pique"); // Supposons que le bot choisit le K de Pique
-
-        if (main.contains(carteK)) {
-            System.out.println(getNom() + " joue la suite 10-J-Q avec le K de Pique !");
-            main.remove(carteK);
-        } else {
-            forcerPiocheJoueurSuivant(paquet);
-        }
     }
 
     private boolean estCarteValide(Carte carteAJouer, Joueur prochainJoueur) {
@@ -266,9 +187,6 @@ public class BotStrategique extends Joueur {
     private Carte choisirCarteAJouer(Joueur prochainJoueur) {
         // Vérifiez d'abord si prochainJoueur est une instance de BotStrategique
         if (prochainJoueur instanceof BotStrategique) {
-            // Convertissez prochainJoueur en BotStrategique
-            BotStrategique botProchainJoueur = (BotStrategique) prochainJoueur;
-
             // Triez la main du BotStrategique par valeur (ou selon une stratégie
             // spécifique)
             Collections.sort(main);
@@ -286,7 +204,8 @@ public class BotStrategique extends Joueur {
         // Si prochainJoueur n'est pas un BotStrategique, retournez null ou une autre
         return null;
     }
- @Override
+
+    @Override
     public Carte choisirCarteAJeter() {
         // Triez la main en ordre décroissant de points
         main.sort(Comparator.comparingInt(Carte::getValeur).reversed());
@@ -304,8 +223,6 @@ public class BotStrategique extends Joueur {
         if (carteMultiples.isPresent()) {
             Map.Entry<Integer, List<Carte>> entry = carteMultiples.get();
             List<Carte> cartesMultiples = entry.getValue();
-            int valeurMultiple = entry.getKey();
-
             // Déterminez le type de multiple (paire, brelan, carré, etc.)
             String typeMultiple;
             switch (cartesMultiples.size()) {
@@ -338,7 +255,8 @@ public class BotStrategique extends Joueur {
             PaquetCartes paquetDeCartes = new PaquetCartes();
             if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 9) {
                 // forcer le joueur suivant a pioche une carte de la pioche
-                System.out.println("La paire contient un 9. Le prochain joueur sera obligé de pioché dans la pioche !!");
+                System.out
+                        .println("La paire contient un 9. Le prochain joueur sera obligé de pioché dans la pioche !!");
                 forcerPiocheJoueurSuivant(paquetDeCartes);
             }
 
@@ -357,7 +275,6 @@ public class BotStrategique extends Joueur {
                     .orElse(null);
 
             if (carteDouble != null) {
-                System.out.println(getNom() + " a jeté la carte de la paire : " + carteDouble);
                 return carteDouble;
             }
         }
@@ -366,7 +283,6 @@ public class BotStrategique extends Joueur {
         if (CombinaisonsDeCartes.estSuite(main)) {
             // Choisissez la carte avec la plus grande valeur dans la suite
             Carte carteSuite = main.get(0);
-            System.out.println(getNom() + " a jeté la carte de la suite : " + carteSuite);
             return carteSuite;
         }
 
@@ -379,7 +295,6 @@ public class BotStrategique extends Joueur {
                     .orElse(null);
 
             if (carteBrelan != null) {
-                System.out.println(getNom() + " a jeté la carte du brelan : " + carteBrelan);
                 return carteBrelan;
             }
         }
@@ -393,7 +308,6 @@ public class BotStrategique extends Joueur {
                     .orElse(null);
 
             if (carteCarre != null) {
-                System.out.println(getNom() + " a jeté la carte du carré : " + carteCarre);
                 return carteCarre;
             }
         }
@@ -401,7 +315,7 @@ public class BotStrategique extends Joueur {
         // S'il n'y a pas de combinaisons spéciales, choisissez la carte avec le plus
         // grand nombre de points
         Carte carteAJeter = main.get(0);
-        System.out.println(getNom() + " a jeté la carte : " + carteAJeter);
+        System.out.println("Carte jetée : " + carteAJeter);
         return carteAJeter;
     }
 
@@ -413,19 +327,21 @@ public class BotStrategique extends Joueur {
         boolean prendreDansDefausse = random.nextBoolean();
 
         // Affichez un message indiquant d'où le joueur a pioché
-        System.out.println(
-                getNom() + " a choisi de piocher dans " + (prendreDansDefausse ? "la défausse." : "la pioche."));
-
+        System.out.println("Il a choisi de piocher dans " + (prendreDansDefausse ? "la défausse." : "la pioche.")); // message
+                                                                                                                    // d'affiche
+                                                                                                                    // de
+                                                                                                                    // joueur
+                                                                                                                    // 2
         if (prendreDansDefausse) {
             // Le bot choisit de piocher dans la défausse
             Carte cartePiochee = paquet.piocherDefausse();
             main.add(cartePiochee);
-            System.out.println(getNom() + " a pioché dans la défausse : " + cartePiochee);
+            System.out.println("Carte piochée dans la défausse : " + cartePiochee);
         } else {
             // Le bot choisit de piocher dans la pioche
             Carte cartePiochee = paquet.piocherCarte();
             main.add(cartePiochee);
-            System.out.println(getNom() + " a pioché dans la pioche : " + cartePiochee);
+            System.out.println("Carte piochée dans la pioche : " + cartePiochee);
         }
 
         return prendreDansDefausse;

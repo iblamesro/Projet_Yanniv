@@ -1,13 +1,14 @@
 package fr.pantheonsorbonne.miage.game;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 // Classe abstraite Joueur
 public abstract class Joueur {
     protected String nom;
     protected ArrayList<Carte> main;
     protected int score;
+    public boolean doitSauterSonTour = false;
 
     public Joueur(String nom, boolean estBot) {
         this.nom = nom;
@@ -30,13 +31,25 @@ public abstract class Joueur {
         this.score += points;
     }
 
+    public void afficherNom() {
+        System.out.println("Main du " + nom + " :");
+    }
+
     public void piocherCarte(PaquetCartes paquet) {
         Carte cartePiochee = paquet.piocherCarte();
         main.add(cartePiochee);
-        System.out.println(nom + " a pioché : " + cartePiochee);
+        System.out.print(cartePiochee + " "); // affichage carte main du joueur
     }
 
-    public abstract void jouerTour(PaquetCartes paquet, Joueur prochainJoueur);
+    public void jouerTour(PaquetCartes paquet, Joueur prochainJoueur) {
+        if (this.doitSauterSonTour) {
+            this.doitSauterSonTour = false;
+        } else {
+            this.jouer(paquet, prochainJoueur);
+        }
+    }
+
+    public abstract void jouer(PaquetCartes paquet, Joueur prochainJoueur);
 
     public abstract boolean demanderAssaf();
 
@@ -48,6 +61,7 @@ public abstract class Joueur {
 
     // Méthode abstraite pour la déclaration de Yaniv ou Assaf
     public abstract void declarerYanivOuAssaf(Joueur joueurGagnant);
+
     public int calculerTotalPoints() {
         int totalPoints = 0;
         int nombreJokers = 0;
@@ -94,7 +108,6 @@ public abstract class Joueur {
                 return 0; // Valeurs non prises en compte
         }
     }
-
 
     private int ajusterPointsJoker(int totalPoints, int nombreJokers) {
         // Si le nombre de Jokers est supérieur à 1, ajuster le total des points
@@ -157,11 +170,6 @@ public abstract class Joueur {
     public boolean piocherCarteApresJeter(PaquetCartes paquet) {
         // Utilisez la méthode piocherCarteApresJeter du paquet
         boolean prendreDansDefausse = paquet.piocherCarteApresJeter();
-
-        // Affichez un message indiquant d'où le joueur a pioché
-        System.out.println(
-                getNom() + " a choisi de piocher dans " + (prendreDansDefausse ? "la défausse." : "la pioche."));
-
         return prendreDansDefausse;
     }
 
@@ -178,7 +186,6 @@ public abstract class Joueur {
         return null;
     }
 
-
     public void jeterCombinaison(PaquetCartes paquet, List<Carte> combinaison) {
         // Assurez-vous que les cartes de la combinaison sont présentes dans la main du
         // joueur
@@ -189,16 +196,8 @@ public abstract class Joueur {
             // Ajoutez ces cartes au paquet (ou à la défausse, selon la logique de votre
             // jeu)
             paquet.ajouterCartes(combinaison);
-
-            // Affichez le type de combinaison
-            if (CombinaisonsDeCartes.estCarre(combinaison)) {
-                System.out.println(getNom() + " a jeté un carré : " + combinaison);
-            } else if (CombinaisonsDeCartes.estBrelan(combinaison)) {
-                System.out.println(getNom() + " a jeté un brelan : " + combinaison);
-            } else if (CombinaisonsDeCartes.estDouble(combinaison)) {
-                System.out.println(getNom() + " a jeté une paire : " + combinaison);
-            } else if (CombinaisonsDeCartes.estSuite(combinaison)) {
-                System.out.println(getNom() + " a jeté une suite : " + combinaison);
+            if (CombinaisonsDeCartes.estSuite(combinaison)) {
+                System.out.println("A jeté une suite : " + combinaison);
             } else {
                 System.out.println(getNom() + " a jeté une combinaison non spécifiée : " + combinaison);
             }
@@ -207,8 +206,8 @@ public abstract class Joueur {
         }
     }
 
-    public void setTourSauté(boolean b) {
+    public void setTourSauté() {
+        this.doitSauterSonTour = true;
     }
 
-    
 }

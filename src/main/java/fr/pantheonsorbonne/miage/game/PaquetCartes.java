@@ -1,4 +1,5 @@
 package fr.pantheonsorbonne.miage.game;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +14,7 @@ public class PaquetCartes {
     public PaquetCartes() {
         cartes = new ArrayList<>();
         String[] valeurs = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-        String[] couleurs = { "Coeur", "Carreau", "Trèfle", "Pique" };
+        String[] couleurs = { "Coeur", "Carreau", "Trèfle", "Pique", };
         defausse = new ArrayList<>();
 
         for (String valeur : valeurs) {
@@ -21,6 +22,9 @@ public class PaquetCartes {
                 cartes.add(new Carte(valeur, couleur));
             }
         }
+        // Ajouter les Jokers au paquet
+        cartes.add(new Carte("Joker", "Joker"));
+        cartes.add(new Carte("Joker", "Joker"));
     }
 
     public Carte piocherCarte() {
@@ -52,7 +56,6 @@ public class PaquetCartes {
     private Carte genererCarteAleatoire() {
         Random random = new Random();
         int valeur = random.nextInt(13) + 1; // Valeur entre 1 et 13 inclus
-        String nom = "Carte" + valeur; // Remplacez cela par une logique appropriée
         String couleur = "Coeur"; // Remplacez cela par une logique appropriée
         return new Carte(Integer.toString(valeur), couleur);
     }
