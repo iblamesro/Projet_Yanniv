@@ -123,7 +123,7 @@ public class BotStrategique extends Joueur {
 // grace à la methode piocherCarte() qui se trouve dans la classe Joueur on lui impose de prendre une carte de la Pioche
     private void forcerPiocheJoueurSuivant(PaquetCartes paquet) {
         Joueur joueurSuivant = obtenirJoueurSuivant();
-        System.out.println("Forcer " + joueurSuivant.getNom() + " à piocher une carte de la pioche.");
+        System.out.println("Forcer " + joueurSuivant.getNom() + " à piocher une carte de la pioche. Carte punition : ");
         joueurSuivant.piocherCarte(paquet);
     }
 
@@ -229,7 +229,7 @@ public class BotStrategique extends Joueur {
             if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 7) {
                 // Change le sens du jeu
                 System.out.println("La paire contient un 7. Le sens du jeu change !");
-                changerSensJeu();
+                sauterTourJoueurSuivant();
             }
             // Vérifie si paire de 8
             if (typeMultiple.equals("paire") && cartesMultiples.get(0).getValeur() == 8) {

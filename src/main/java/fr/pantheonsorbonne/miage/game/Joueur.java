@@ -38,7 +38,7 @@ public abstract class Joueur {
     public void piocherCarte(PaquetCartes paquet) {
         Carte cartePiochee = paquet.piocherCarte();
         main.add(cartePiochee);
-        System.out.print(cartePiochee + " "); //Affichage des carte dans la main du joueur
+        System.out.print(cartePiochee + "\n"); //Affichage des carte dans la main du joueur
     }
 
     //Méthode qui permet lors de la paire 8 de sauter le tour du prochain joueur 
